@@ -2,7 +2,7 @@ package backend.model;
 
 public class Ellipse implements Figure {
 
-    protected final Point centerPoint;
+    protected Point centerPoint;
     protected double sMayorAxis, sMinorAxis;
 
     public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis) {
@@ -33,6 +33,16 @@ public class Ellipse implements Figure {
         double copyMayorAxis = sMayorAxis;
         sMayorAxis = sMinorAxis;
         sMinorAxis = copyMayorAxis;
+    }
+
+    public void flipHorizontally(){
+        Point newCenterPoint = new Point(centerPoint.getX()+this.getsMayorAxis(), centerPoint.getY());
+        centerPoint = newCenterPoint;
+    }
+
+    public void flipVertically(){
+        Point newCenterPoint = new Point(centerPoint.getX(), centerPoint.getY()+this.getsMinorAxis());
+        centerPoint = newCenterPoint;
     }
 
 }

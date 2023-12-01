@@ -23,6 +23,18 @@ public class CanvasState {
         addFigure(figure);
     }
 
+    public void flipHFigure(Figure figure){
+        deleteFigure(figure);
+        figure.flipHorizontally();
+        addFigure(figure);
+    }
+
+    public void flipVFigure(Figure figure){
+        deleteFigure(figure);
+        figure.flipVertically();
+        addFigure(figure);
+    }
+
     public Iterable<Figure> figures() {
         return new ArrayList<>(list);
     }

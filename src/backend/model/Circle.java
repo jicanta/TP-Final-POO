@@ -15,4 +15,12 @@ public class Circle extends Ellipse {
         return sMayorAxis / 2;
     }
 
+    public void flipHorizontally(){
+        super.flipHorizontally();
+    }
+
+    public void flipVertically(){
+        super.flipVertically();
+    }
+
 }

@@ -11,4 +11,12 @@ public class Square extends Rectangle {
         return String.format("Cuadrado [ %s , %s ]", getTopLeft(), getBottomRight());
     }
 
+    public void flipHorizontally(){
+        super.flipHorizontally();
+    }
+
+    public void flipVertically(){
+        super.flipVertically();
+    }
+
 }

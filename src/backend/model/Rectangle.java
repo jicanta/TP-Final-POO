@@ -50,4 +50,18 @@ public class Rectangle implements Figure {
         topLeft = newTopLeft;
         bottomRight = newBotRight;
     }
+
+    public void flipHorizontally(){
+        Point newTopLeft = new Point(topLeft.getX()+this.getWidth(),topLeft.getY());
+        Point newBottomRight = new Point(bottomRight.getX()+this.getWidth(), bottomRight.getY());
+        this.topLeft = newTopLeft;
+        this.bottomRight = newBottomRight;
+    }
+
+    public void flipVertically(){
+        Point newTopLeft = new Point(topLeft.getX(),topLeft.getY()+this.getHeight());
+        Point newBottomRight = new Point(bottomRight.getX(), bottomRight.getY()+this.getHeight());
+        this.topLeft = newTopLeft;
+        this.bottomRight = newBottomRight;
+    }
 }

@@ -35,6 +35,8 @@ public class PaintPane extends BorderPane {
 	ToggleButton ellipseButton = new ToggleButton("Elipse");
 	ToggleButton deleteButton = new ToggleButton("Borrar");
 	ToggleButton rotateRightButton = new ToggleButton("Girar D");
+	ToggleButton flipH = new ToggleButton("Voltear H");
+	ToggleButton flipV = new ToggleButton("Voltear V");
 
 	// Selector de color de relleno
 	ColorPicker fillColorPicker = new ColorPicker(defaultFillColor);
@@ -54,7 +56,7 @@ public class PaintPane extends BorderPane {
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
-		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, rotateRightButton};
+		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, rotateRightButton, flipH, flipV};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
 			tool.setMinWidth(90);
@@ -185,6 +187,22 @@ public class PaintPane extends BorderPane {
 		rotateRightButton.setOnAction(event -> {
 			if(selectedFigure != null) {
 				canvasState.rotateFigure(selectedFigure);
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
+		flipH.setOnAction(event -> {
+			if(selectedFigure != null) {
+				canvasState.flipHFigure(selectedFigure);
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
+		flipV.setOnAction(event -> {
+			if(selectedFigure != null) {
+				canvasState.flipVFigure(selectedFigure);
 				selectedFigure = null;
 				redrawCanvas();
 			}
