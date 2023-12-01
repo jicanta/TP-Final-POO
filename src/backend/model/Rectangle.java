@@ -2,11 +2,19 @@ package backend.model;
 
 public class Rectangle implements Figure {
 
-    private final Point topLeft, bottomRight;
+    private Point topLeft, bottomRight;
 
     public Rectangle(Point topLeft, Point bottomRight) {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
+    }
+
+    public double getHeight() {
+        return topLeft.getY() - bottomRight.getY();
+    }
+
+    public double getWidth() {
+        return bottomRight.getX() - topLeft.getX();
     }
 
     public Point getTopLeft() {
@@ -22,4 +30,24 @@ public class Rectangle implements Figure {
         return String.format("Rectángulo [ %s , %s ]", topLeft, bottomRight);
     }
 
+    @Override
+    public void rotateR() {
+        double topLeftX = topLeft.getX();
+        double topLeftY = topLeft.getY();
+        double botRightX = bottomRight.getX();
+        double botRightY = bottomRight.getY();
+        double width = getWidth();
+        double height = getHeight();
+
+        double newTopX = topLeftX + (width - height) / 2;
+        double newTopY = topLeftY + (width - height) / 2;
+        double newBotX = botRightX - (width - height) / 2;
+        double newBotY = botRightY - (width - height) / 2;
+
+        Point newTopLeft = new Point(newTopX, newTopY);
+        Point newBotRight = new Point(newBotX, newBotY);
+
+        topLeft = newTopLeft;
+        bottomRight = newBotRight;
+    }
 }

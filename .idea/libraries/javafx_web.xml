@@ -1,7 +1,6 @@
 <component name="libraryTable">
-  <library name="javafx.swing">
+  <library name="javafx.web">
     <CLASSES>
-      <root url="jar://$USER_HOME$/AppData/Local/Temp/javafx.swing.jar!/" />
       <root url="jar://$USER_HOME$/AppData/Local/Temp/javafx.web.jar!/" />
       <root url="jar://$USER_HOME$/AppData/Local/Temp/javafx-swt.jar!/" />
       <root url="jar://$USER_HOME$/AppData/Local/Temp/javafx.base.jar!/" />
@@ -9,6 +8,7 @@
       <root url="jar://$USER_HOME$/AppData/Local/Temp/javafx.fxml.jar!/" />
       <root url="jar://$USER_HOME$/AppData/Local/Temp/javafx.graphics.jar!/" />
       <root url="jar://$USER_HOME$/AppData/Local/Temp/javafx.media.jar!/" />
+      <root url="jar://$USER_HOME$/AppData/Local/Temp/javafx.swing.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

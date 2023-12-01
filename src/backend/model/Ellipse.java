@@ -3,7 +3,7 @@ package backend.model;
 public class Ellipse implements Figure {
 
     protected final Point centerPoint;
-    protected final double sMayorAxis, sMinorAxis;
+    protected double sMayorAxis, sMinorAxis;
 
     public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis) {
         this.centerPoint = centerPoint;
@@ -26,6 +26,13 @@ public class Ellipse implements Figure {
 
     public double getsMinorAxis() {
         return sMinorAxis;
+    }
+
+    @Override
+    public void rotateR() {
+        double copyMayorAxis = sMayorAxis;
+        sMayorAxis = sMinorAxis;
+        sMinorAxis = copyMayorAxis;
     }
 
 }
