@@ -63,6 +63,9 @@ public class Ellipse implements Figure {
 
     @Override
     public boolean isInside(Rectangle rectangle) {
-        return rectangle.figureBelongs(centerPoint);
+        return rectangle.figureBelongs(new Point(centerPoint.x + sMayorAxis, centerPoint.y)) &&
+                rectangle.figureBelongs(new Point(centerPoint.x - sMayorAxis, centerPoint.y)) &&
+                rectangle.figureBelongs(new Point(centerPoint.x , centerPoint.y + sMinorAxis)) &&
+                rectangle.figureBelongs(new Point(centerPoint.x , centerPoint.y - sMinorAxis));
     }
 }

@@ -88,7 +88,6 @@ public class Rectangle implements Figure {
 
     @Override
     public boolean isInside(Rectangle rectangle) {
-        Point centerPoint = new Point((topLeft.x + bottomRight.x) / 2, (topLeft.y + bottomRight.y) / 2);
-        return figureBelongs(centerPoint);
+        return rectangle.figureBelongs(topLeft) && rectangle.figureBelongs(bottomRight);
     }
 }
