@@ -86,7 +86,7 @@ public class PaintPane extends BorderPane {
 				return ;
 			}
 			Figure newFigure = null;
-
+			/* TODO: el uso de tantos if else me da dudas, igual nose como se haria sino pero pongo por las dudas */
 			if(rectangleButton.isSelected()) {
 				newFigure = new Rectangle(startPoint, endPoint);
 			}
@@ -154,6 +154,11 @@ public class PaintPane extends BorderPane {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
 				double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
+				/* TODO: siento que anti paradigma de objetos o mal uso del instanceof nose cual seria pero hacer tipo
+    			if selectedFigure instanceOf rectangle y asi con cada figura me parece pesimo, creo que habria que
+    			hacer un enum con los nombres de las figuras y con eso se busca que figura es, no estoy segura pero
+   				habia un ejercicio que hacia algo asi para ver que objeto era digamos. Ademas, esto es a lo que me referia
+   				en point, que si los hacemos final aca no podemos modificar los point directo, habria q crear nuevos */
 				if(selectedFigure instanceof Rectangle) {
 					Rectangle rectangle = (Rectangle) selectedFigure;
 					rectangle.getTopLeft().x += diffX;
@@ -240,6 +245,7 @@ public class PaintPane extends BorderPane {
 				gc.setStroke(lineColor);
 			}
 			gc.setFill(figureColorMap.get(figure));
+			/* TODO: mismo comentario que antes */
 			if(figure instanceof Rectangle) {
 				Rectangle rectangle = (Rectangle) figure;
 				gc.fillRect(rectangle.getTopLeft().getX(), rectangle.getTopLeft().getY(),
@@ -266,6 +272,7 @@ public class PaintPane extends BorderPane {
 	}
 	boolean figureBelongs(Figure figure, Point eventPoint) {
 		boolean found = false;
+		/* TODO: mismo comentario que antes */
 		if(figure instanceof Rectangle) {
 			Rectangle rectangle = (Rectangle) figure;
 			found = eventPoint.getX() > rectangle.getTopLeft().getX() && eventPoint.getX() < rectangle.getBottomRight().getX() &&
