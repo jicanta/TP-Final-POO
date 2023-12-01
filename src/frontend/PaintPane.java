@@ -159,27 +159,38 @@ public class PaintPane extends BorderPane {
     			hacer un enum con los nombres de las figuras y con eso se busca que figura es, no estoy segura pero
    				habia un ejercicio que hacia algo asi para ver que objeto era digamos. Ademas, esto es a lo que me referia
    				en point, que si los hacemos final aca no podemos modificar los point directo, habria q crear nuevos */
-				if(selectedFigure instanceof Rectangle) {
-					Rectangle rectangle = (Rectangle) selectedFigure;
-					rectangle.getTopLeft().x += diffX;
-					rectangle.getBottomRight().x += diffX;
-					rectangle.getTopLeft().y += diffY;
-					rectangle.getBottomRight().y += diffY;
-				} else if(selectedFigure instanceof Circle) {
-					Circle circle = (Circle) selectedFigure;
-					circle.getCenterPoint().x += diffX;
-					circle.getCenterPoint().y += diffY;
-				} else if(selectedFigure instanceof Square) {
-					Square square = (Square) selectedFigure;
-					square.getTopLeft().x += diffX;
-					square.getBottomRight().x += diffX;
-					square.getTopLeft().y += diffY;
-					square.getBottomRight().y += diffY;
-				} else if(selectedFigure instanceof Ellipse) {
-					Ellipse ellipse = (Ellipse) selectedFigure;
-					ellipse.getCenterPoint().x += diffX;
-					ellipse.getCenterPoint().y += diffY;
+				if(selectedFigure != null){
+					if(selectedFigure instanceof Rectangle) {
+						Rectangle rectangle = (Rectangle) selectedFigure;
+						rectangle.getTopLeft().x += diffX;
+						rectangle.getBottomRight().x += diffX;
+						rectangle.getTopLeft().y += diffY;
+						rectangle.getBottomRight().y += diffY;
+					} else if(selectedFigure instanceof Circle) {
+						Circle circle = (Circle) selectedFigure;
+						circle.getCenterPoint().x += diffX;
+						circle.getCenterPoint().y += diffY;
+					} else if(selectedFigure instanceof Square) {
+						Square square = (Square) selectedFigure;
+						square.getTopLeft().x += diffX;
+						square.getBottomRight().x += diffX;
+						square.getTopLeft().y += diffY;
+						square.getBottomRight().y += diffY;
+					} else if(selectedFigure instanceof Ellipse) {
+						Ellipse ellipse = (Ellipse) selectedFigure;
+						ellipse.getCenterPoint().x += diffX;
+						ellipse.getCenterPoint().y += diffY;
+					}
 				}
+				else{ //me creo el rectangulo,
+					Rectangle auxRectangle = new Rectangle(startPoint, eventPoint);
+					for(Figure figure : canvasState.figures()){
+						if(figure.isInside(auxRectangle)){
+							//lo agrego a la seleccion
+						}
+					}
+				}
+
 				redrawCanvas();
 			}
 		});

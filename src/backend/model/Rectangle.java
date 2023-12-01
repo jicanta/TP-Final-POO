@@ -85,4 +85,10 @@ public class Rectangle implements Figure {
         return point.getX() > topLeft.getX() && point.getX() < bottomRight.getX() &&
                 point.getY() > topLeft.getY() && point.getY() < bottomRight.getY();
     }
+
+    @Override
+    public boolean isInside(Rectangle rectangle) {
+        Point centerPoint = new Point((topLeft.x + bottomRight.x) / 2, (topLeft.y + bottomRight.y) / 2);
+        return figureBelongs(centerPoint);
+    }
 }

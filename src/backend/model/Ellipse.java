@@ -60,4 +60,9 @@ public class Ellipse implements Figure {
         return ((Math.pow(point.getX() - centerPoint.getX(), 2) / Math.pow(sMayorAxis, 2)) +
                 (Math.pow(point.getY() - centerPoint.getY(), 2) / Math.pow(sMinorAxis, 2))) <= 0.30;
     }
+
+    @Override
+    public boolean isInside(Rectangle rectangle) {
+        return rectangle.figureBelongs(centerPoint);
+    }
 }

@@ -7,6 +7,7 @@ public interface Figure {
     void flipVertically();
     void augment();
     void reduce();
-
     boolean figureBelongs(Point point);
+
+    boolean isInside(Rectangle rectangle);
 }
