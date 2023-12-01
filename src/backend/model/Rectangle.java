@@ -79,4 +79,10 @@ public class Rectangle implements Figure {
         this.topLeft = newTopLeft;
         this.bottomRight = newBottomRight;
     }
+
+    @Override
+    public boolean figureBelongs(Point point) {
+        return point.getX() > topLeft.getX() && point.getX() < bottomRight.getX() &&
+                point.getY() > topLeft.getY() && point.getY() < bottomRight.getY();
+    }
 }

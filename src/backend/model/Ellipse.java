@@ -54,4 +54,10 @@ public class Ellipse implements Figure {
         this.sMayorAxis = this.getsMayorAxis()*0.75;
         this.sMinorAxis = this.getsMinorAxis()*0.75;
     }
+
+    @Override
+    public boolean figureBelongs(Point point) {
+        return ((Math.pow(point.getX() - centerPoint.getX(), 2) / Math.pow(sMayorAxis, 2)) +
+                (Math.pow(point.getY() - centerPoint.getY(), 2) / Math.pow(sMinorAxis, 2))) <= 0.30;
+    }
 }

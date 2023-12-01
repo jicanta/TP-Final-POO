@@ -10,21 +10,4 @@ public class Square extends Rectangle {
     public String toString() {
         return String.format("Cuadrado [ %s , %s ]", getTopLeft(), getBottomRight());
     }
-
-    public void flipHorizontally(){
-        super.flipHorizontally();
-    }
-
-    public void flipVertically(){
-        super.flipVertically();
-    }
-
-    public void augment(){
-        super.augment();
-    }
-
-    public void reduce(){
-        super.reduce();
-    }
-
 }

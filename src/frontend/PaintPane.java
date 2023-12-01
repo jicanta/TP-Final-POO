@@ -270,6 +270,7 @@ public class PaintPane extends BorderPane {
 			}
 		}
 	}
+	// TODO: esto deberia en el back en la interfaz figure
 	boolean figureBelongs(Figure figure, Point eventPoint) {
 		boolean found = false;
 		/* TODO: mismo comentario que antes */

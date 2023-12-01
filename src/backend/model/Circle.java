@@ -8,27 +8,10 @@ public class Circle extends Ellipse {
 
     @Override
     public String toString() {
-        return String.format("Círculo [Centro: %s, Radio: %.2f]", centerPoint, sMayorAxis / 2);
+        return String.format("Círculo [Centro: %s, Radio: %.2f]", centerPoint, getRadius());
     }
 
     public double getRadius() {
         return sMayorAxis / 2;
     }
-
-    public void flipHorizontally(){
-        super.flipHorizontally();
-    }
-
-    public void flipVertically(){
-        super.flipVertically();
-    }
-
-    public void augment(){
-        super.augment();
-    }
-
-    public void reduce(){
-        super.reduce();
-    }
-
 }
