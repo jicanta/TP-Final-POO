@@ -35,8 +35,10 @@ public class PaintPane extends BorderPane {
 	ToggleButton ellipseButton = new ToggleButton("Elipse");
 	ToggleButton deleteButton = new ToggleButton("Borrar");
 	ToggleButton rotateRightButton = new ToggleButton("Girar D");
-	ToggleButton flipH = new ToggleButton("Voltear H");
-	ToggleButton flipV = new ToggleButton("Voltear V");
+	ToggleButton flipHButton = new ToggleButton("Voltear H");
+	ToggleButton flipVButton = new ToggleButton("Voltear V");
+	ToggleButton augmentButton = new ToggleButton("Escalar +");
+	ToggleButton reduceButton = new ToggleButton("Escalar -");
 
 	// Selector de color de relleno
 	ColorPicker fillColorPicker = new ColorPicker(defaultFillColor);
@@ -56,7 +58,7 @@ public class PaintPane extends BorderPane {
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
-		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, rotateRightButton, flipH, flipV};
+		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, rotateRightButton, flipHButton, flipVButton, augmentButton, reduceButton};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
 			tool.setMinWidth(90);
@@ -84,6 +86,7 @@ public class PaintPane extends BorderPane {
 				return ;
 			}
 			Figure newFigure = null;
+
 			if(rectangleButton.isSelected()) {
 				newFigure = new Rectangle(startPoint, endPoint);
 			}
@@ -192,7 +195,7 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-		flipH.setOnAction(event -> {
+		flipHButton.setOnAction(event -> {
 			if(selectedFigure != null) {
 				canvasState.flipHFigure(selectedFigure);
 				selectedFigure = null;
@@ -200,9 +203,25 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-		flipV.setOnAction(event -> {
+		flipVButton.setOnAction(event -> {
 			if(selectedFigure != null) {
 				canvasState.flipVFigure(selectedFigure);
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
+		augmentButton.setOnAction(event -> {
+			if(selectedFigure != null) {
+				canvasState.augmentFigure(selectedFigure);
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
+		reduceButton.setOnAction(event -> {
+			if(selectedFigure != null) {
+				canvasState.reduceFigure(selectedFigure);
 				selectedFigure = null;
 				redrawCanvas();
 			}
@@ -245,7 +264,6 @@ public class PaintPane extends BorderPane {
 			}
 		}
 	}
-
 	boolean figureBelongs(Figure figure, Point eventPoint) {
 		boolean found = false;
 		if(figure instanceof Rectangle) {

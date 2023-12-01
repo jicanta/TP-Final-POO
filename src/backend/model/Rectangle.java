@@ -54,13 +54,28 @@ public class Rectangle implements Figure {
     public void flipHorizontally(){
         Point newTopLeft = new Point(topLeft.getX()+this.getWidth(),topLeft.getY());
         Point newBottomRight = new Point(bottomRight.getX()+this.getWidth(), bottomRight.getY());
-        this.topLeft = newTopLeft;
-        this.bottomRight = newBottomRight;
+        setNewPoints(newTopLeft, newBottomRight);
     }
 
     public void flipVertically(){
         Point newTopLeft = new Point(topLeft.getX(),topLeft.getY()+this.getHeight());
         Point newBottomRight = new Point(bottomRight.getX(), bottomRight.getY()+this.getHeight());
+        setNewPoints(newTopLeft, newBottomRight);
+    }
+
+    public void augment(){
+        Point newTopLeft = new Point(topLeft.getX() - this.getWidth()*0.125,topLeft.getY() - this.getHeight()*0.125);
+        Point newBottomRight = new Point(bottomRight.getX() + this.getWidth()*0.125, bottomRight.getY() + this.getHeight()*0.125);
+        setNewPoints(newTopLeft, newBottomRight);
+    }
+
+    public void reduce(){
+        Point newTopLeft = new Point(topLeft.getX() + this.getWidth()*0.125,topLeft.getY() + this.getHeight()*0.125);
+        Point newBottomRight = new Point(bottomRight.getX() - this.getWidth()*0.125, bottomRight.getY() - this.getHeight()*0.125);
+        setNewPoints(newTopLeft, newBottomRight);
+    }
+
+    private void setNewPoints(Point newTopLeft, Point newBottomRight){
         this.topLeft = newTopLeft;
         this.bottomRight = newBottomRight;
     }

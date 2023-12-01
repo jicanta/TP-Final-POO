@@ -45,4 +45,13 @@ public class Ellipse implements Figure {
         centerPoint = newCenterPoint;
     }
 
+    public void augment(){
+        this.sMayorAxis = this.getsMayorAxis()*1.25;
+        this.sMinorAxis = this.getsMinorAxis()*1.25;
+    }
+
+    public void reduce() {
+        this.sMayorAxis = this.getsMayorAxis()*0.75;
+        this.sMinorAxis = this.getsMinorAxis()*0.75;
+    }
 }

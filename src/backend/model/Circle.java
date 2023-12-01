@@ -23,4 +23,12 @@ public class Circle extends Ellipse {
         super.flipVertically();
     }
 
+    public void augment(){
+        super.augment();
+    }
+
+    public void reduce(){
+        super.reduce();
+    }
+
 }

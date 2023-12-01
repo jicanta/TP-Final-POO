@@ -19,4 +19,12 @@ public class Square extends Rectangle {
         super.flipVertically();
     }
 
+    public void augment(){
+        super.augment();
+    }
+
+    public void reduce(){
+        super.reduce();
+    }
+
 }

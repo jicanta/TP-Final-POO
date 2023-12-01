@@ -35,6 +35,18 @@ public class CanvasState {
         addFigure(figure);
     }
 
+    public void augmentFigure(Figure figure){
+        deleteFigure(figure);
+        figure.augment();
+        addFigure(figure);
+    }
+
+    public void reduceFigure(Figure figure){
+        deleteFigure(figure);
+        figure.reduce();
+        addFigure(figure);
+    }
+
     public Iterable<Figure> figures() {
         return new ArrayList<>(list);
     }
