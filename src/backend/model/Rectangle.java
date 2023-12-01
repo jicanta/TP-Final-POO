@@ -10,7 +10,7 @@ public class Rectangle implements Figure {
     }
 
     public double getHeight() {
-        return topLeft.getY() - bottomRight.getY();
+        return bottomRight.getY() - topLeft.getY();
     }
 
     public double getWidth() {
@@ -39,10 +39,10 @@ public class Rectangle implements Figure {
         double width = getWidth();
         double height = getHeight();
 
-        double newTopX = topLeftX + (width - height) / 2;
-        double newTopY = topLeftY + (width - height) / 2;
-        double newBotX = botRightX - (width - height) / 2;
-        double newBotY = botRightY - (width - height) / 2;
+        double newTopX = topLeftX + (width - height) / 2.0;
+        double newTopY = topLeftY - (width - height) / 2.0;
+        double newBotX = botRightX - (width - height) / 2.0;
+        double newBotY = botRightY + (width - height) / 2.0;
 
         Point newTopLeft = new Point(newTopX, newTopY);
         Point newBotRight = new Point(newBotX, newBotY);

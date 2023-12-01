@@ -17,6 +17,12 @@ public class CanvasState {
         list.remove(figure);
     }
 
+    public void rotateFigure(Figure figure) {
+        deleteFigure(figure);
+        figure.rotateR();
+        addFigure(figure);
+    }
+
     public Iterable<Figure> figures() {
         return new ArrayList<>(list);
     }
