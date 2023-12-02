@@ -1,6 +1,7 @@
 package frontend;
 
 import backend.CanvasState;
+import backend.FigureComposition;
 import backend.model.*;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -43,6 +44,9 @@ public class PaintPane extends BorderPane {
 	ToggleButton augmentButton = new ToggleButton("Escalar +");
 	ToggleButton reduceButton = new ToggleButton("Escalar -");
 
+	ToggleButton groupButton = new ToggleButton("Agrupar");
+	ToggleButton ungroupButton = new ToggleButton("Desagrupar");
+
 	// Selector de color de relleno
 	ColorPicker fillColorPicker = new ColorPicker(defaultFillColor);
 
@@ -51,6 +55,8 @@ public class PaintPane extends BorderPane {
 
 	// Figuras seleccionadas
 	ArrayList<Figure> selectedFigures = new ArrayList<>();
+
+	ArrayList<FigureComposition> figureCompositions = new ArrayList<>();
 
 	// StatusBar
 	StatusPane statusPane;
@@ -61,7 +67,7 @@ public class PaintPane extends BorderPane {
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
-		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, rotateRightButton, flipHButton, flipVButton, augmentButton, reduceButton};
+		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, groupButton, ungroupButton ,rotateRightButton, flipHButton, flipVButton, augmentButton, reduceButton};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
 			tool.setMinWidth(90);
@@ -123,12 +129,13 @@ public class PaintPane extends BorderPane {
 					double sMayorAxis = Math.abs(endPoint.x - startPoint.x);
 					double sMinorAxis = Math.abs(endPoint.y - startPoint.y);
 					newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis);
-				} else {
+				}
+				else {
 					return;
 				}
 				figureColorMap.put(newFigure, fillColorPicker.getValue());
 				canvasState.addFigure(newFigure);
-				startPoint = null;
+				//startPoint = null; TODO: POR DEFAULT LO IGUALABA A NULL, NO ENTIENDO EL PORQUE
 				redrawCanvas();
 			}
 		});
@@ -151,8 +158,8 @@ public class PaintPane extends BorderPane {
 		});
 
 		canvas.setOnMouseClicked(event -> {
-			Point eventPoint = new Point(event.getX(), event.getY());
-			if(startPoint != null && startPoint.equals(eventPoint) && selectionButton.isSelected()) {
+			Point eventPoint = new Point(event.getX(), event.getY());//TODO: STARTPOINT NO LO COMPARO CON NULL XQ NO LO IGUALE A NULL ANTES
+			if(/*startPoint != null && */startPoint.equals(eventPoint) && selectionButton.isSelected()) {
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
 				Figure prev = null;
@@ -215,9 +222,19 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-		deleteButton.setOnAction(event -> {
+		deleteButton.setOnAction(event -> { //TODO: CREO QUE ESTA MAL EL REMOVE CUANDO ITERAS
+			boolean foundInComposition = false;
 			for(Figure selectedFigure : selectedFigures) {
-				canvasState.deleteFigure(selectedFigure);
+				for (FigureComposition composition : figureCompositions){
+					if(composition.contains(selectedFigure)){
+						composition.reduceComposition();
+						foundInComposition = true;
+						figureCompositions.remove(composition);
+					}
+				}
+				if(!foundInComposition){
+					canvasState.deleteFigure(selectedFigure);
+				}
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -226,8 +243,17 @@ public class PaintPane extends BorderPane {
 		});
 
 		rotateRightButton.setOnAction(event -> {
+			boolean foundInComposition = false;
 			for(Figure selectedFigure : selectedFigures) {
-				canvasState.rotateFigure(selectedFigure);
+				for (FigureComposition composition : figureCompositions){
+					if(composition.contains(selectedFigure)){
+						composition.rotateComposition();
+						foundInComposition = true;
+					}
+				}
+				if(!foundInComposition){
+					canvasState.rotateFigure(selectedFigure);
+				}
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -236,8 +262,17 @@ public class PaintPane extends BorderPane {
 		});
 
 		flipHButton.setOnAction(event -> {
+			boolean foundInComposition = false;
 			for(Figure selectedFigure : selectedFigures) {
-				canvasState.flipHFigure(selectedFigure);
+				for (FigureComposition composition : figureCompositions){
+					if(composition.contains(selectedFigure)){
+						composition.flipHComposition();
+						foundInComposition = true;
+					}
+				}
+				if(!foundInComposition){
+					canvasState.flipHFigure(selectedFigure);
+				}
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -246,8 +281,17 @@ public class PaintPane extends BorderPane {
 		});
 
 		flipVButton.setOnAction(event -> {
+			boolean foundInComposition = false;
 			for(Figure selectedFigure : selectedFigures) {
-				canvasState.flipVFigure(selectedFigure);
+				for (FigureComposition composition : figureCompositions){
+					if(composition.contains(selectedFigure)){
+						composition.flipVComposition();
+						foundInComposition = true;
+					}
+				}
+				if(!foundInComposition){
+					canvasState.flipVFigure(selectedFigure);
+				}
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -256,8 +300,17 @@ public class PaintPane extends BorderPane {
 		});
 
 		augmentButton.setOnAction(event -> {
+			boolean foundInComposition = false;
 			for(Figure selectedFigure : selectedFigures) {
-				canvasState.augmentFigure(selectedFigure);
+				for (FigureComposition figureComposition : figureCompositions){
+					if(figureComposition.contains(selectedFigure)){
+						figureComposition.augmentComposition();
+						foundInComposition = true;
+					}
+				}
+				if(!foundInComposition){
+					canvasState.augmentFigure(selectedFigure);
+				}
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -266,13 +319,46 @@ public class PaintPane extends BorderPane {
 		});
 
 		reduceButton.setOnAction(event -> {
+			boolean foundInComposition = false;
 			for(Figure selectedFigure : selectedFigures) {
-				canvasState.reduceFigure(selectedFigure);
+				for (FigureComposition figureComposition : figureCompositions){
+					if(figureComposition.contains(selectedFigure)){
+						figureComposition.reduceComposition();
+						foundInComposition = true;
+					}
+				}
+				if(!foundInComposition){
+					canvasState.reduceFigure(selectedFigure);
+				}
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
 				redrawCanvas();
 			}
+		});
+
+		groupButton.setOnAction(event -> {
+			if(!selectedFigures.isEmpty()) {
+				FigureComposition figureComposition = new FigureComposition(canvasState);
+				figureComposition.addList(selectedFigures);
+				figureCompositions.add(figureComposition);  //TODO: NOSE SI ESTOY MEZCLANDO FRONT CON BACK
+				selectedFigures.clear();
+				redrawCanvas();
+			}
+		});
+
+		ungroupButton.setOnAction(event -> { //TODO: NO SE PUEDE ELIMINAR UN ELEM DE LA LISTA QUE SE ITERA
+			/*for(Figure selectedFigure : selectedFigures){
+				for (FigureComposition figureComposition : figureCompositions){
+					if(figureComposition.contains(selectedFigure)){
+						figureCompositions.remove(figureComposition);
+					}
+				}
+			}
+			if(!selectedFigures.isEmpty()) {
+				selectedFigures.clear();
+				redrawCanvas();
+			}*/
 		});
 
 		setLeft(buttonsBox);
@@ -282,35 +368,59 @@ public class PaintPane extends BorderPane {
 	void redrawCanvas() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		for(Figure figure : canvasState.figures()) {
+			boolean foundInComposition = false;
 			if(selectedFigures.contains(figure)) {
 				gc.setStroke(Color.RED);
 			} else {
 				gc.setStroke(lineColor);
 			}
 			gc.setFill(figureColorMap.get(figure));
-			/* TODO: mismo comentario que antes */
-			if(figure instanceof Rectangle) {
-				Rectangle rectangle = (Rectangle) figure;
-				gc.fillRect(rectangle.getTopLeft().getX(), rectangle.getTopLeft().getY(),
-						Math.abs(rectangle.getTopLeft().getX() - rectangle.getBottomRight().getX()), Math.abs(rectangle.getTopLeft().getY() - rectangle.getBottomRight().getY()));
-				gc.strokeRect(rectangle.getTopLeft().getX(), rectangle.getTopLeft().getY(),
-						Math.abs(rectangle.getTopLeft().getX() - rectangle.getBottomRight().getX()), Math.abs(rectangle.getTopLeft().getY() - rectangle.getBottomRight().getY()));
-			} else if(figure instanceof Circle) {
-				Circle circle = (Circle) figure;
-				double diameter = circle.getRadius() * 2;
-				gc.fillOval(circle.getCenterPoint().getX() - circle.getRadius(), circle.getCenterPoint().getY() - circle.getRadius(), diameter, diameter);
-				gc.strokeOval(circle.getCenterPoint().getX() - circle.getRadius(), circle.getCenterPoint().getY() - circle.getRadius(), diameter, diameter);
-			} else if(figure instanceof Square) {
-				Square square = (Square) figure;
-				gc.fillRect(square.getTopLeft().getX(), square.getTopLeft().getY(),
-						Math.abs(square.getTopLeft().getX() - square.getBottomRight().getX()), Math.abs(square.getTopLeft().getY() - square.getBottomRight().getY()));
-				gc.strokeRect(square.getTopLeft().getX(), square.getTopLeft().getY(),
-						Math.abs(square.getTopLeft().getX() - square.getBottomRight().getX()), Math.abs(square.getTopLeft().getY() - square.getBottomRight().getY()));
-			} else if(figure instanceof Ellipse) {
-				Ellipse ellipse = (Ellipse) figure;
-				gc.strokeOval(ellipse.getCenterPoint().getX() - (ellipse.getsMayorAxis() / 2), ellipse.getCenterPoint().getY() - (ellipse.getsMinorAxis() / 2), ellipse.getsMayorAxis(), ellipse.getsMinorAxis());
-				gc.fillOval(ellipse.getCenterPoint().getX() - (ellipse.getsMayorAxis() / 2), ellipse.getCenterPoint().getY() - (ellipse.getsMinorAxis() / 2), ellipse.getsMayorAxis(), ellipse.getsMinorAxis());
+														//TODO: REVISAR CODIGO, QUEDO MUY FEO
+			for(FigureComposition figureComposition : figureCompositions){
+				if(figureComposition.contains(figure)){
+					foundInComposition = true;
+					if(selectedFigures.contains(figure)){
+						figureComposition.isSelected = true;
+					}
+					if(figureComposition.isSelected){
+						gc.setStroke(Color.RED); //TODO: (COMENTARIO X SI SE ENTIENDE EL CODIGO) SI LA COMPOSICION ESTA SELECCIONADA, EL BORDE DE TODAS LAS FIGURAS DEBE SER ROJO
+					}
+					for(Figure figureToPaint : figureComposition){
+						/* TODO: mismo comentario que antes */
+						paintFigure(figureToPaint);
+					}
+				}
 			}
+			if(!foundInComposition){
+				paintFigure(figure);
+			}
+		}
+		for (FigureComposition figureComposition : figureCompositions){
+			figureComposition.isSelected = false; //TODO: (COMENTARIO X SI NO SE ENTIENDE EL CODIGO) "reseteo" los flag que indican si las compos estan seleccionadas.
+		}
+	}
+	private void paintFigure(Figure figure){
+		if(figure instanceof Rectangle) {
+			Rectangle rectangle = (Rectangle) figure;
+			gc.fillRect(rectangle.getTopLeft().getX(), rectangle.getTopLeft().getY(),
+					Math.abs(rectangle.getTopLeft().getX() - rectangle.getBottomRight().getX()), Math.abs(rectangle.getTopLeft().getY() - rectangle.getBottomRight().getY()));
+			gc.strokeRect(rectangle.getTopLeft().getX(), rectangle.getTopLeft().getY(),
+					Math.abs(rectangle.getTopLeft().getX() - rectangle.getBottomRight().getX()), Math.abs(rectangle.getTopLeft().getY() - rectangle.getBottomRight().getY()));
+		} else if(figure instanceof Circle) {
+			Circle circle = (Circle) figure;
+			double diameter = circle.getRadius() * 2;
+			gc.fillOval(circle.getCenterPoint().getX() - circle.getRadius(), circle.getCenterPoint().getY() - circle.getRadius(), diameter, diameter);
+			gc.strokeOval(circle.getCenterPoint().getX() - circle.getRadius(), circle.getCenterPoint().getY() - circle.getRadius(), diameter, diameter);
+		} else if(figure instanceof Square) {
+			Square square = (Square) figure;
+			gc.fillRect(square.getTopLeft().getX(), square.getTopLeft().getY(),
+					Math.abs(square.getTopLeft().getX() - square.getBottomRight().getX()), Math.abs(square.getTopLeft().getY() - square.getBottomRight().getY()));
+			gc.strokeRect(square.getTopLeft().getX(), square.getTopLeft().getY(),
+					Math.abs(square.getTopLeft().getX() - square.getBottomRight().getX()), Math.abs(square.getTopLeft().getY() - square.getBottomRight().getY()));
+		} else if(figure instanceof Ellipse) {
+			Ellipse ellipse = (Ellipse) figure;
+			gc.strokeOval(ellipse.getCenterPoint().getX() - (ellipse.getsMayorAxis() / 2), ellipse.getCenterPoint().getY() - (ellipse.getsMinorAxis() / 2), ellipse.getsMayorAxis(), ellipse.getsMinorAxis());
+			gc.fillOval(ellipse.getCenterPoint().getX() - (ellipse.getsMayorAxis() / 2), ellipse.getCenterPoint().getY() - (ellipse.getsMinorAxis() / 2), ellipse.getsMayorAxis(), ellipse.getsMinorAxis());
 		}
 	}
 }

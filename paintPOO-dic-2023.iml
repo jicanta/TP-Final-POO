@@ -10,5 +10,6 @@
     <orderEntry type="library" name="javafx.swing" level="project" />
     <orderEntry type="library" name="javafx.graphics" level="project" />
     <orderEntry type="library" name="javafx.controls" level="project" />
+    <orderEntry type="library" name="javafx-swt" level="project" />
   </component>
 </module>
