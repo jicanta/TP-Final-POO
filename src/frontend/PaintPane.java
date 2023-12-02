@@ -13,6 +13,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.sql.SQLOutput;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,8 +49,8 @@ public class PaintPane extends BorderPane {
 	// Dibujar una figura
 	Point startPoint;
 
-	// Seleccionar una figura
-	Figure selectedFigure;
+	// Figuras seleccionadas
+	ArrayList<Figure> selectedFigures = new ArrayList<>();
 
 	// StatusBar
 	StatusPane statusPane;
@@ -85,29 +88,49 @@ public class PaintPane extends BorderPane {
 			if(endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
 				return ;
 			}
-			Figure newFigure = null;
-			/* TODO: el uso de tantos if else me da dudas, igual nose como se haria sino pero pongo por las dudas */
-			if(rectangleButton.isSelected()) {
-				newFigure = new Rectangle(startPoint, endPoint);
-			}
-			else if(circleButton.isSelected()) {
-				double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
-				newFigure = new Circle(startPoint, circleRadius);
-			} else if(squareButton.isSelected()) {
-				double size = Math.abs(endPoint.getX() - startPoint.getX());
-				newFigure = new Square(startPoint, size);
-			} else if(ellipseButton.isSelected()) {
-				Point centerPoint = new Point(Math.abs(endPoint.x + startPoint.x) / 2, (Math.abs((endPoint.y + startPoint.y)) / 2));
-				double sMayorAxis = Math.abs(endPoint.x - startPoint.x);
-				double sMinorAxis = Math.abs(endPoint.y - startPoint.y);
-				newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis);
+
+			if(selectionButton.isSelected()) {
+				boolean found = false;
+				StringBuilder label = new StringBuilder("Se seleccionó: ");
+				Rectangle selectionRect = new Rectangle(startPoint, endPoint);
+				for(Figure figure : canvasState.figures()) {
+					if(figure.isInside(selectionRect)) {
+						found = true;
+						selectedFigures.add(figure);
+						label.append(figure.toString());
+					}
+				}
+				if (found) {
+					statusPane.updateStatus(label.toString());
+				} else {
+					selectedFigures.clear();
+					statusPane.updateStatus("Ninguna figura encontrada");
+				}
+				redrawCanvas();
 			} else {
-				return ;
+				Figure newFigure = null;
+				/* TODO: el uso de tantos if else me da dudas, igual nose como se haria sino pero pongo por las dudas */
+				if (rectangleButton.isSelected()) {
+					newFigure = new Rectangle(startPoint, endPoint);
+				} else if (circleButton.isSelected()) {
+					double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
+					newFigure = new Circle(startPoint, circleRadius);
+				} else if (squareButton.isSelected()) {
+					double size = Math.abs(endPoint.getX() - startPoint.getX());
+					newFigure = new Square(startPoint, size);
+				} else if (ellipseButton.isSelected()) {
+					Point centerPoint = new Point(Math.abs(endPoint.x + startPoint.x) / 2, (Math.abs((endPoint.y + startPoint.y)) / 2));
+					double sMayorAxis = Math.abs(endPoint.x - startPoint.x);
+					double sMinorAxis = Math.abs(endPoint.y - startPoint.y);
+					newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis);
+				} else {
+					return;
+				}
+				figureColorMap.put(newFigure, fillColorPicker.getValue());
+				canvasState.addFigure(newFigure);
+				startPoint = null;
+				redrawCanvas();
 			}
-			figureColorMap.put(newFigure, fillColorPicker.getValue());
-			canvasState.addFigure(newFigure);
-			startPoint = null;
-			redrawCanvas();
 		});
 
 		canvas.setOnMouseMoved(event -> {
@@ -128,21 +151,25 @@ public class PaintPane extends BorderPane {
 		});
 
 		canvas.setOnMouseClicked(event -> {
-			if(selectionButton.isSelected()) {
-				Point eventPoint = new Point(event.getX(), event.getY());
+			Point eventPoint = new Point(event.getX(), event.getY());
+			if(startPoint != null && startPoint.equals(eventPoint) && selectionButton.isSelected()) {
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
+				Figure prev = null;
+				// TODO: ver si se puede hacer mas eficiente recorriendo la lista al reves
 				for (Figure figure : canvasState.figures()) {
 					if(figure.figureBelongs(eventPoint)) {
+						selectedFigures.remove(prev);
 						found = true;
-						selectedFigure = figure;
+						selectedFigures.add(figure);
 						label.append(figure.toString());
+						prev = figure;
 					}
 				}
 				if (found) {
 					statusPane.updateStatus(label.toString());
 				} else {
-					selectedFigure = null;
+					selectedFigures.clear();
 					statusPane.updateStatus("Ninguna figura encontrada");
 				}
 				redrawCanvas();
@@ -159,86 +186,91 @@ public class PaintPane extends BorderPane {
     			hacer un enum con los nombres de las figuras y con eso se busca que figura es, no estoy segura pero
    				habia un ejercicio que hacia algo asi para ver que objeto era digamos. Ademas, esto es a lo que me referia
    				en point, que si los hacemos final aca no podemos modificar los point directo, habria q crear nuevos */
-				if(selectedFigure != null){
-					if(selectedFigure instanceof Rectangle) {
+				for(Figure selectedFigure : selectedFigures) {
+					if (selectedFigure instanceof Rectangle) {
 						Rectangle rectangle = (Rectangle) selectedFigure;
 						rectangle.getTopLeft().x += diffX;
 						rectangle.getBottomRight().x += diffX;
 						rectangle.getTopLeft().y += diffY;
 						rectangle.getBottomRight().y += diffY;
-					} else if(selectedFigure instanceof Circle) {
+					} else if (selectedFigure instanceof Circle) {
 						Circle circle = (Circle) selectedFigure;
 						circle.getCenterPoint().x += diffX;
 						circle.getCenterPoint().y += diffY;
-					} else if(selectedFigure instanceof Square) {
+					} else if (selectedFigure instanceof Square) {
 						Square square = (Square) selectedFigure;
 						square.getTopLeft().x += diffX;
 						square.getBottomRight().x += diffX;
 						square.getTopLeft().y += diffY;
 						square.getBottomRight().y += diffY;
-					} else if(selectedFigure instanceof Ellipse) {
+					} else if (selectedFigure instanceof Ellipse) {
 						Ellipse ellipse = (Ellipse) selectedFigure;
 						ellipse.getCenterPoint().x += diffX;
 						ellipse.getCenterPoint().y += diffY;
 					}
 				}
-				else{ //me creo el rectangulo,
-					Rectangle auxRectangle = new Rectangle(startPoint, eventPoint);
-					for(Figure figure : canvasState.figures()){
-						if(figure.isInside(auxRectangle)){
-							//lo agrego a la seleccion
-						}
-					}
+				if(!selectedFigures.isEmpty()) {
+					redrawCanvas();
 				}
-
-				redrawCanvas();
 			}
 		});
 
 		deleteButton.setOnAction(event -> {
-			if (selectedFigure != null) {
+			for(Figure selectedFigure : selectedFigures) {
 				canvasState.deleteFigure(selectedFigure);
-				selectedFigure = null;
+			}
+			if(!selectedFigures.isEmpty()) {
+				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
 
 		rotateRightButton.setOnAction(event -> {
-			if(selectedFigure != null) {
+			for(Figure selectedFigure : selectedFigures) {
 				canvasState.rotateFigure(selectedFigure);
-				selectedFigure = null;
+			}
+			if(!selectedFigures.isEmpty()) {
+				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
 
 		flipHButton.setOnAction(event -> {
-			if(selectedFigure != null) {
+			for(Figure selectedFigure : selectedFigures) {
 				canvasState.flipHFigure(selectedFigure);
-				selectedFigure = null;
+			}
+			if(!selectedFigures.isEmpty()) {
+				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
 
 		flipVButton.setOnAction(event -> {
-			if(selectedFigure != null) {
+			for(Figure selectedFigure : selectedFigures) {
 				canvasState.flipVFigure(selectedFigure);
-				selectedFigure = null;
+			}
+			if(!selectedFigures.isEmpty()) {
+				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
 
 		augmentButton.setOnAction(event -> {
-			if(selectedFigure != null) {
+			for(Figure selectedFigure : selectedFigures) {
 				canvasState.augmentFigure(selectedFigure);
-				selectedFigure = null;
+			}
+			if(!selectedFigures.isEmpty()) {
+				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
 
 		reduceButton.setOnAction(event -> {
-			if(selectedFigure != null) {
+			for(Figure selectedFigure : selectedFigures) {
 				canvasState.reduceFigure(selectedFigure);
-				selectedFigure = null;
+			}
+			if(!selectedFigures.isEmpty()) {
+				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
@@ -250,7 +282,7 @@ public class PaintPane extends BorderPane {
 	void redrawCanvas() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		for(Figure figure : canvasState.figures()) {
-			if(figure == selectedFigure) {
+			if(selectedFigures.contains(figure)) {
 				gc.setStroke(Color.RED);
 			} else {
 				gc.setStroke(lineColor);
