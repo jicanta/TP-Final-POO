@@ -1,5 +1,7 @@
 package backend.model;
 
+import javafx.scene.canvas.GraphicsContext;
+
 public class Rectangle implements Figure {
 
     private Point topLeft, bottomRight;
@@ -28,6 +30,20 @@ public class Rectangle implements Figure {
     @Override
     public String toString() {
         return String.format("Rectángulo [ %s , %s ]", topLeft, bottomRight);
+    }
+
+    @Override
+    public void moveFigure(Double diffX, Double diffY){
+        this.topLeft.x += diffX;
+        this.topLeft.y += diffY;
+        this.bottomRight.x += diffX;
+        this.bottomRight.y += diffY;
+    }
+
+    @Override
+    public void paint(GraphicsContext gc){
+        gc.fillRect(this.topLeft.x, this.topLeft.y, this.getWidth(), this.getHeight());
+        gc.strokeRect(this.topLeft.x, this.topLeft.y, this.getWidth(), this.getHeight());
     }
 
     @Override

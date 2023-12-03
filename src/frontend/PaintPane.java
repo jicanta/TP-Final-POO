@@ -18,6 +18,7 @@ import java.sql.SQLOutput;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PaintPane extends BorderPane {
@@ -43,7 +44,6 @@ public class PaintPane extends BorderPane {
 	ToggleButton flipVButton = new ToggleButton("Voltear V");
 	ToggleButton augmentButton = new ToggleButton("Escalar +");
 	ToggleButton reduceButton = new ToggleButton("Escalar -");
-
 	ToggleButton groupButton = new ToggleButton("Agrupar");
 	ToggleButton ungroupButton = new ToggleButton("Desagrupar");
 
@@ -53,9 +53,9 @@ public class PaintPane extends BorderPane {
 	// Dibujar una figura
 	Point startPoint;
 
-	// Figuras seleccionadas
+	// Lista de figuras seleccionadas
 	ArrayList<Figure> selectedFigures = new ArrayList<>();
-
+	// Lista de agrupaciones de figuras
 	ArrayList<FigureComposition> figureCompositions = new ArrayList<>();
 
 	// StatusBar
@@ -95,6 +95,7 @@ public class PaintPane extends BorderPane {
 				return ;
 			}
 
+
 			if(selectionButton.isSelected()) {
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
@@ -103,7 +104,7 @@ public class PaintPane extends BorderPane {
 					if(figure.isInside(selectionRect)) {
 						found = true;
 						selectedFigures.add(figure);
-						label.append(figure.toString());
+						// borrar: label.append(figure.toString());
 					}
 				}
 				if (found) {
@@ -113,6 +114,7 @@ public class PaintPane extends BorderPane {
 					statusPane.updateStatus("Ninguna figura encontrada");
 				}
 				redrawCanvas();
+
 			} else {
 				Figure newFigure = null;
 				/* TODO: el uso de tantos if else me da dudas, igual nose como se haria sino pero pongo por las dudas */
@@ -158,8 +160,8 @@ public class PaintPane extends BorderPane {
 		});
 
 		canvas.setOnMouseClicked(event -> {
-			Point eventPoint = new Point(event.getX(), event.getY());//TODO: STARTPOINT NO LO COMPARO CON NULL XQ NO LO IGUALE A NULL ANTES
-			if(/*startPoint != null && */startPoint.equals(eventPoint) && selectionButton.isSelected()) {
+			Point eventPoint = new Point(event.getX(), event.getY()); // TODO: STARTPOINT NO LO COMPARO CON NULL XQ NO LO IGUALE A NULL ANTES
+			if(/* startPoint != null && */ startPoint.equals(eventPoint) && selectionButton.isSelected()) {
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
 				Figure prev = null;
@@ -183,6 +185,7 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
+		// esto es para mover las figuras
 		canvas.setOnMouseDragged(event -> {
 			if(selectionButton.isSelected()) {
 				Point eventPoint = new Point(event.getX(), event.getY());
@@ -192,7 +195,7 @@ public class PaintPane extends BorderPane {
     			if selectedFigure instanceOf rectangle y asi con cada figura me parece pesimo, creo que habria que
     			hacer un enum con los nombres de las figuras y con eso se busca que figura es, no estoy segura pero
    				habia un ejercicio que hacia algo asi para ver que objeto era digamos. Ademas, esto es a lo que me referia
-   				en point, que si los hacemos final aca no podemos modificar los point directo, habria q crear nuevos */
+   				en point, que si los hacemos final aca no podemos modificar los point directo, habria q crear nuevos
 				for(Figure selectedFigure : selectedFigures) {
 					if (selectedFigure instanceof Rectangle) {
 						Rectangle rectangle = (Rectangle) selectedFigure;
@@ -215,6 +218,10 @@ public class PaintPane extends BorderPane {
 						ellipse.getCenterPoint().x += diffX;
 						ellipse.getCenterPoint().y += diffY;
 					}
+				} */
+				// SOLUCION PROPUESTA:
+				for (Figure selectedFigure : selectedFigures){
+					selectedFigure.moveFigure(diffX, diffY);
 				}
 				if(!selectedFigures.isEmpty()) {
 					redrawCanvas();
@@ -348,7 +355,7 @@ public class PaintPane extends BorderPane {
 		});
 
 		ungroupButton.setOnAction(event -> { //TODO: NO SE PUEDE ELIMINAR UN ELEM DE LA LISTA QUE SE ITERA
-			/*for(Figure selectedFigure : selectedFigures){
+			/* for(Figure selectedFigure : selectedFigures){
 				for (FigureComposition figureComposition : figureCompositions){
 					if(figureComposition.contains(selectedFigure)){
 						figureCompositions.remove(figureComposition);
@@ -399,7 +406,7 @@ public class PaintPane extends BorderPane {
 			figureComposition.isSelected = false; //TODO: (COMENTARIO X SI NO SE ENTIENDE EL CODIGO) "reseteo" los flag que indican si las compos estan seleccionadas.
 		}
 	}
-	private void paintFigure(Figure figure){
+	/* private void paintFigure(Figure figure){
 		if(figure instanceof Rectangle) {
 			Rectangle rectangle = (Rectangle) figure;
 			gc.fillRect(rectangle.getTopLeft().getX(), rectangle.getTopLeft().getY(),
@@ -422,5 +429,9 @@ public class PaintPane extends BorderPane {
 			gc.strokeOval(ellipse.getCenterPoint().getX() - (ellipse.getsMayorAxis() / 2), ellipse.getCenterPoint().getY() - (ellipse.getsMinorAxis() / 2), ellipse.getsMayorAxis(), ellipse.getsMinorAxis());
 			gc.fillOval(ellipse.getCenterPoint().getX() - (ellipse.getsMayorAxis() / 2), ellipse.getCenterPoint().getY() - (ellipse.getsMinorAxis() / 2), ellipse.getsMayorAxis(), ellipse.getsMinorAxis());
 		}
+	} */
+	// SOLUCION PROPUESTA:
+	private void paintFigure(Figure figure){
+		figure.paint(gc);
 	}
 }

@@ -9,7 +9,6 @@ import java.util.List;
 public class FigureComposition implements Iterable<Figure>{
 
     private CanvasState canvasState;
-
     private List<Figure> compositionList;
     public boolean isSelected = false;
 
