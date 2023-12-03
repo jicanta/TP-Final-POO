@@ -357,7 +357,6 @@ public class PaintPane extends BorderPane {
 			} else {
 				gc.setStroke(lineColor);
 			}
-			gc.setFill(figureColorMap.get(figure));
 														//TODO: REVISAR CODIGO, QUEDO MUY FEO
 			for(FigureComposition figureComposition : figureCompositions){
 				if(figureComposition.contains(figure)){
@@ -370,11 +369,13 @@ public class PaintPane extends BorderPane {
 					}
 					for(Figure figureToPaint : figureComposition){
 						/* TODO: mismo comentario que antes */
+                        gc.setFill(figureColorMap.get(figureToPaint));
 						paintFigure(figureToPaint);
 					}
 				}
 			}
 			if(!foundInComposition){
+                gc.setFill(figureColorMap.get(figure));
 				paintFigure(figure);
 			}
 		}
