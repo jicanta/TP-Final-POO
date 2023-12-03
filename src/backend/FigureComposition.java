@@ -17,6 +17,10 @@ public class FigureComposition implements Iterable<Figure>{
         compositionList = new ArrayList<>();
     }
 
+    public List<Figure> getList(){
+        return this.compositionList;
+    }
+
     public void add(Figure fig){
         compositionList.add(fig);
     }

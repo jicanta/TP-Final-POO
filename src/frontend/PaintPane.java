@@ -191,35 +191,6 @@ public class PaintPane extends BorderPane {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
 				double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
-				/* TODO: siento que anti paradigma de objetos o mal uso del instanceof nose cual seria pero hacer tipo
-    			if selectedFigure instanceOf rectangle y asi con cada figura me parece pesimo, creo que habria que
-    			hacer un enum con los nombres de las figuras y con eso se busca que figura es, no estoy segura pero
-   				habia un ejercicio que hacia algo asi para ver que objeto era digamos. Ademas, esto es a lo que me referia
-   				en point, que si los hacemos final aca no podemos modificar los point directo, habria q crear nuevos
-				for(Figure selectedFigure : selectedFigures) {
-					if (selectedFigure instanceof Rectangle) {
-						Rectangle rectangle = (Rectangle) selectedFigure;
-						rectangle.getTopLeft().x += diffX;
-						rectangle.getBottomRight().x += diffX;
-						rectangle.getTopLeft().y += diffY;
-						rectangle.getBottomRight().y += diffY;
-					} else if (selectedFigure instanceof Circle) {
-						Circle circle = (Circle) selectedFigure;
-						circle.getCenterPoint().x += diffX;
-						circle.getCenterPoint().y += diffY;
-					} else if (selectedFigure instanceof Square) {
-						Square square = (Square) selectedFigure;
-						square.getTopLeft().x += diffX;
-						square.getBottomRight().x += diffX;
-						square.getTopLeft().y += diffY;
-						square.getBottomRight().y += diffY;
-					} else if (selectedFigure instanceof Ellipse) {
-						Ellipse ellipse = (Ellipse) selectedFigure;
-						ellipse.getCenterPoint().x += diffX;
-						ellipse.getCenterPoint().y += diffY;
-					}
-				} */
-				// SOLUCION PROPUESTA:
 				for (Figure selectedFigure : selectedFigures){
 					selectedFigure.moveFigure(diffX, diffY);
 				}
@@ -230,18 +201,21 @@ public class PaintPane extends BorderPane {
 		});
 
 		deleteButton.setOnAction(event -> { //TODO: CREO QUE ESTA MAL EL REMOVE CUANDO ITERAS
+			List<Figure> toDelete = new ArrayList<>();
 			boolean foundInComposition = false;
 			for(Figure selectedFigure : selectedFigures) {
 				for (FigureComposition composition : figureCompositions){
 					if(composition.contains(selectedFigure)){
-						composition.reduceComposition();
-						foundInComposition = true;
+						toDelete.addAll(composition.getList());
 						figureCompositions.remove(composition);
 					}
 				}
 				if(!foundInComposition){
-					canvasState.deleteFigure(selectedFigure);
+					toDelete.add(selectedFigure);
 				}
+			}
+			for (Figure fig : selectedFigures){
+				canvasState.deleteFigure(fig);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -326,17 +300,19 @@ public class PaintPane extends BorderPane {
 		});
 
 		reduceButton.setOnAction(event -> {
-			boolean foundInComposition = false;
+			List<FigureComposition> toAdd = new ArrayList<>();
 			for(Figure selectedFigure : selectedFigures) {
 				for (FigureComposition figureComposition : figureCompositions){
-					if(figureComposition.contains(selectedFigure)){
-						figureComposition.reduceComposition();
-						foundInComposition = true;
+					if(figureComposition.contains(selectedFigure) && !toAdd.contains(figureComposition)){
+						toAdd.add(figureComposition);
 					}
 				}
-				if(!foundInComposition){
-					canvasState.reduceFigure(selectedFigure);
-				}
+			}
+			for(FigureComposition comp : toAdd){
+				selectedFigures.addAll(comp.getList());
+			}
+			for(Figure fig : selectedFigures){
+				canvasState.reduceFigure(fig);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -406,31 +382,6 @@ public class PaintPane extends BorderPane {
 			figureComposition.isSelected = false; //TODO: (COMENTARIO X SI NO SE ENTIENDE EL CODIGO) "reseteo" los flag que indican si las compos estan seleccionadas.
 		}
 	}
-	/* private void paintFigure(Figure figure){
-		if(figure instanceof Rectangle) {
-			Rectangle rectangle = (Rectangle) figure;
-			gc.fillRect(rectangle.getTopLeft().getX(), rectangle.getTopLeft().getY(),
-					Math.abs(rectangle.getTopLeft().getX() - rectangle.getBottomRight().getX()), Math.abs(rectangle.getTopLeft().getY() - rectangle.getBottomRight().getY()));
-			gc.strokeRect(rectangle.getTopLeft().getX(), rectangle.getTopLeft().getY(),
-					Math.abs(rectangle.getTopLeft().getX() - rectangle.getBottomRight().getX()), Math.abs(rectangle.getTopLeft().getY() - rectangle.getBottomRight().getY()));
-		} else if(figure instanceof Circle) {
-			Circle circle = (Circle) figure;
-			double diameter = circle.getRadius() * 2;
-			gc.fillOval(circle.getCenterPoint().getX() - circle.getRadius(), circle.getCenterPoint().getY() - circle.getRadius(), diameter, diameter);
-			gc.strokeOval(circle.getCenterPoint().getX() - circle.getRadius(), circle.getCenterPoint().getY() - circle.getRadius(), diameter, diameter);
-		} else if(figure instanceof Square) {
-			Square square = (Square) figure;
-			gc.fillRect(square.getTopLeft().getX(), square.getTopLeft().getY(),
-					Math.abs(square.getTopLeft().getX() - square.getBottomRight().getX()), Math.abs(square.getTopLeft().getY() - square.getBottomRight().getY()));
-			gc.strokeRect(square.getTopLeft().getX(), square.getTopLeft().getY(),
-					Math.abs(square.getTopLeft().getX() - square.getBottomRight().getX()), Math.abs(square.getTopLeft().getY() - square.getBottomRight().getY()));
-		} else if(figure instanceof Ellipse) {
-			Ellipse ellipse = (Ellipse) figure;
-			gc.strokeOval(ellipse.getCenterPoint().getX() - (ellipse.getsMayorAxis() / 2), ellipse.getCenterPoint().getY() - (ellipse.getsMinorAxis() / 2), ellipse.getsMayorAxis(), ellipse.getsMinorAxis());
-			gc.fillOval(ellipse.getCenterPoint().getX() - (ellipse.getsMayorAxis() / 2), ellipse.getCenterPoint().getY() - (ellipse.getsMinorAxis() / 2), ellipse.getsMayorAxis(), ellipse.getsMinorAxis());
-		}
-	} */
-	// SOLUCION PROPUESTA:
 	private void paintFigure(Figure figure){
 		figure.paint(gc);
 	}
