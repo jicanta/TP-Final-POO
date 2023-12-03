@@ -7,8 +7,7 @@ public class Rectangle implements Figure {
     private Point topLeft, bottomRight;
 
     public Rectangle(Point topLeft, Point bottomRight) {
-        this.topLeft = topLeft;
-        this.bottomRight = bottomRight;
+        setNewPoints(topLeft, bottomRight);
     }
 
     public double getHeight() {
@@ -34,16 +33,13 @@ public class Rectangle implements Figure {
 
     @Override
     public void moveFigure(Double diffX, Double diffY){
-        this.topLeft.x += diffX;
-        this.topLeft.y += diffY;
-        this.bottomRight.x += diffX;
-        this.bottomRight.y += diffY;
+        setNewPoints(new Point(topLeft.getX()+diffX, topLeft.getY()+diffY), new Point(bottomRight.getX()+diffX, bottomRight.getY()+diffY));
     }
 
     @Override
     public void paint(GraphicsContext gc){
-        gc.fillRect(this.topLeft.x, this.topLeft.y, this.getWidth(), this.getHeight());
-        gc.strokeRect(this.topLeft.x, this.topLeft.y, this.getWidth(), this.getHeight());
+        gc.fillRect(this.topLeft.getX(), this.topLeft.getY(), this.getWidth(), this.getHeight());
+        gc.strokeRect(this.topLeft.getX(), this.topLeft.getY(), this.getWidth(), this.getHeight());
     }
 
     @Override
@@ -60,11 +56,7 @@ public class Rectangle implements Figure {
         double newBotX = botRightX - (width - height) / 2.0;
         double newBotY = botRightY + (width - height) / 2.0;
 
-        Point newTopLeft = new Point(newTopX, newTopY);
-        Point newBotRight = new Point(newBotX, newBotY);
-
-        topLeft = newTopLeft;
-        bottomRight = newBotRight;
+        setNewPoints(new Point(newTopX, newTopY), new Point(newBotX, newBotY));
     }
 
     public void flipHorizontally(){

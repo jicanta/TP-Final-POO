@@ -5,9 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public interface Figure {
     void moveFigure(Double diffX, Double diffY);
-
     void paint(GraphicsContext gc);
-
     void rotateR();
     void flipHorizontally();
     void flipVertically();

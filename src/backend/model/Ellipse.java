@@ -8,13 +8,17 @@ public class Ellipse implements Figure {
     protected double sMayorAxis, sMinorAxis;
 
     public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis) {
-        this.centerPoint = centerPoint;
+        setCenterPoint(centerPoint.getX(), centerPoint.getY());
         this.sMayorAxis = sMayorAxis;
         this.sMinorAxis = sMinorAxis;
     }
 
     public Point getCenterPoint() {
         return centerPoint;
+    }
+
+    private void setCenterPoint(double x, double y){
+        this.centerPoint = new Point(x, y);
     }
 
     public double getsMayorAxis() {
@@ -32,14 +36,13 @@ public class Ellipse implements Figure {
 
     @Override
     public void moveFigure(Double diffX, Double diffY){
-        this.centerPoint.x += diffX;
-        this.centerPoint.y += diffY;
+        setCenterPoint(centerPoint.getX()+diffX, centerPoint.getY()+diffY);
     }
 
     @Override
     public void paint(GraphicsContext gc){
-        gc.strokeOval(this.centerPoint.x - (this.sMayorAxis/2), this.centerPoint.y - (this.sMinorAxis/2), sMayorAxis, sMinorAxis);
-        gc.fillOval(this.centerPoint.x - (this.sMayorAxis/2), this.centerPoint.y - (this.sMinorAxis/2), sMayorAxis, sMinorAxis);
+        gc.strokeOval(this.centerPoint.getX() - (this.sMayorAxis/2), this.centerPoint.getY() - (this.sMinorAxis/2), sMayorAxis, sMinorAxis);
+        gc.fillOval(this.centerPoint.getX() - (this.sMayorAxis/2), this.centerPoint.getY() - (this.sMinorAxis/2), sMayorAxis, sMinorAxis);
     }
 
     @Override
@@ -50,13 +53,11 @@ public class Ellipse implements Figure {
     }
 
     public void flipHorizontally(){
-        Point newCenterPoint = new Point(centerPoint.getX()+this.getsMayorAxis(), centerPoint.getY());
-        centerPoint = newCenterPoint;
+        setCenterPoint(centerPoint.getX()+this.getsMayorAxis(), centerPoint.getY());
     }
 
     public void flipVertically(){
-        Point newCenterPoint = new Point(centerPoint.getX(), centerPoint.getY()+this.getsMinorAxis());
-        centerPoint = newCenterPoint;
+        setCenterPoint(centerPoint.getX(), centerPoint.getY()+this.getsMinorAxis());
     }
 
     public void augment(){
@@ -77,9 +78,9 @@ public class Ellipse implements Figure {
 
     @Override
     public boolean isInside(Rectangle rectangle) {
-        return rectangle.figureBelongs(new Point(centerPoint.x + sMayorAxis / 2, centerPoint.y)) &&
-                rectangle.figureBelongs(new Point(centerPoint.x - sMayorAxis / 2, centerPoint.y)) &&
-                rectangle.figureBelongs(new Point(centerPoint.x , centerPoint.y + sMinorAxis / 2)) &&
-                rectangle.figureBelongs(new Point(centerPoint.x , centerPoint.y - sMinorAxis / 2));
+        return rectangle.figureBelongs(new Point(centerPoint.getX() + sMayorAxis / 2, centerPoint.getY())) &&
+                rectangle.figureBelongs(new Point(centerPoint.getY() - sMayorAxis / 2, centerPoint.getY())) &&
+                rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() + sMinorAxis / 2)) &&
+                rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() - sMinorAxis / 2));
     }
 }

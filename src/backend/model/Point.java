@@ -7,7 +7,8 @@ public class Point {
     archivo PaintPane (buscar comentario porque de todas maneras creo q esta mal esa parte asi que la cambiariamos igual)
     Ademas creo q deberian ser private (o protected como mucho) pq sino los podes acceder directamente y la idea
     es usar los getters */
-    public double x, y;
+
+    private final double x, y;
 
     public Point(double x, double y) {
         this.x = x;
