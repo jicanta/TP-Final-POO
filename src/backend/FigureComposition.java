@@ -8,12 +8,10 @@ import java.util.List;
 
 public class FigureComposition implements Iterable<Figure>{
 
-    private CanvasState canvasState;
     private List<Figure> compositionList;
     public boolean isSelected = false;
 
-    public FigureComposition(CanvasState canvasState){
-        this.canvasState = canvasState;
+    public FigureComposition(){
         compositionList = new ArrayList<>();
     }
 
@@ -25,7 +23,7 @@ public class FigureComposition implements Iterable<Figure>{
         compositionList.addAll(figuresList);
     }
 
-    public void deleteComposition(){
+    public void deleteComposition(CanvasState canvasState){
         for (Figure fig : compositionList){
             canvasState.deleteFigure(fig);
         }
@@ -35,31 +33,31 @@ public class FigureComposition implements Iterable<Figure>{
         return compositionList.contains(fig);
     }
 
-    public void rotateComposition(){
+    public void rotateComposition(CanvasState canvasState){
         for(Figure fig : compositionList){
             canvasState.rotateFigure(fig);
         }
     }
 
-    public void flipHComposition(){
+    public void flipHComposition(CanvasState canvasState){
         for(Figure fig : compositionList){
             canvasState.flipHFigure(fig);
         }
     }
 
-    public void flipVComposition(){
+    public void flipVComposition(CanvasState canvasState){
         for(Figure fig : compositionList){
             canvasState.flipVFigure(fig);
         }
     }
 
-    public void augmentComposition(){
+    public void augmentComposition(CanvasState canvasState){
         for(Figure fig : compositionList){
             canvasState.augmentFigure(fig);
         }
     }
 
-    public void reduceComposition(){
+    public void reduceComposition(CanvasState canvasState){
         for(Figure fig : compositionList){
             canvasState.reduceFigure(fig);
         }

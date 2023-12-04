@@ -83,4 +83,12 @@ public class Ellipse implements Figure {
                 rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() + sMinorAxis / 2)) &&
                 rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() - sMinorAxis / 2));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (obj instanceof Ellipse p && centerPoint.equals(p.getCenterPoint())
+                && Double.compare(sMayorAxis, p.getsMayorAxis()) == 0
+                && Double.compare(sMinorAxis, p.getsMinorAxis()) == 0);
+    }
+
 }

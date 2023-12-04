@@ -98,4 +98,11 @@ public class Rectangle implements Figure {
     public boolean isInside(Rectangle rectangle) {
         return rectangle.figureBelongs(topLeft) && rectangle.figureBelongs(bottomRight);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (obj instanceof Rectangle p && topLeft.equals(p.getTopLeft())
+                && bottomRight.equals(p.getBottomRight()));
+    }
+
 }

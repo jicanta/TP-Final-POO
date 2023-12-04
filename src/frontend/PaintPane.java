@@ -234,7 +234,7 @@ public class PaintPane extends BorderPane {
 			for(Figure selectedFigure : selectedFigures) {
 				for (FigureComposition composition : figureCompositions){
 					if(composition.contains(selectedFigure)){
-						composition.reduceComposition();
+						composition.reduceComposition(canvasState);
 						foundInComposition = true;
 						figureCompositions.remove(composition);
 					}
@@ -254,7 +254,7 @@ public class PaintPane extends BorderPane {
 			for(Figure selectedFigure : selectedFigures) {
 				for (FigureComposition composition : figureCompositions){
 					if(composition.contains(selectedFigure)){
-						composition.rotateComposition();
+						composition.rotateComposition(canvasState);
 						foundInComposition = true;
 					}
 				}
@@ -273,7 +273,7 @@ public class PaintPane extends BorderPane {
 			for(Figure selectedFigure : selectedFigures) {
 				for (FigureComposition composition : figureCompositions){
 					if(composition.contains(selectedFigure)){
-						composition.flipHComposition();
+						composition.flipHComposition(canvasState);
 						foundInComposition = true;
 					}
 				}
@@ -292,7 +292,7 @@ public class PaintPane extends BorderPane {
 			for(Figure selectedFigure : selectedFigures) {
 				for (FigureComposition composition : figureCompositions){
 					if(composition.contains(selectedFigure)){
-						composition.flipVComposition();
+						composition.flipVComposition(canvasState);
 						foundInComposition = true;
 					}
 				}
@@ -311,7 +311,7 @@ public class PaintPane extends BorderPane {
 			for(Figure selectedFigure : selectedFigures) {
 				for (FigureComposition figureComposition : figureCompositions){
 					if(figureComposition.contains(selectedFigure)){
-						figureComposition.augmentComposition();
+						figureComposition.augmentComposition(canvasState);
 						foundInComposition = true;
 					}
 				}
@@ -330,7 +330,7 @@ public class PaintPane extends BorderPane {
 			for(Figure selectedFigure : selectedFigures) {
 				for (FigureComposition figureComposition : figureCompositions){
 					if(figureComposition.contains(selectedFigure)){
-						figureComposition.reduceComposition();
+						figureComposition.reduceComposition(canvasState);
 						foundInComposition = true;
 					}
 				}
@@ -346,11 +346,21 @@ public class PaintPane extends BorderPane {
 
 		groupButton.setOnAction(event -> {
 			if(!selectedFigures.isEmpty()) {
-				FigureComposition figureComposition = new FigureComposition(canvasState);
-				figureComposition.addList(selectedFigures);
-				figureCompositions.add(figureComposition);  //TODO: NOSE SI ESTOY MEZCLANDO FRONT CON BACK
-				selectedFigures.clear();
-				redrawCanvas();
+				boolean isInComposition = false;
+				for(Figure figure : selectedFigures){
+					for (FigureComposition figureComposition : figureCompositions){
+						if(figureComposition.contains(figure)){
+							isInComposition = true;
+						}
+					}
+				}
+				if(!isInComposition){
+					FigureComposition figureComposition = new FigureComposition();
+					figureComposition.addList(selectedFigures);
+					figureCompositions.add(figureComposition);  //TODO: NOSE SI ESTOY MEZCLANDO FRONT CON BACK
+					selectedFigures.clear();
+					redrawCanvas();
+				}
 			}
 		});
 
