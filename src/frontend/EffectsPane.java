@@ -10,14 +10,20 @@ import javafx.scene.layout.HBox;
 public class EffectsPane extends BorderPane {
     private final Label effectsLabel;
 
+    // TODO: nose si hace falta guardar los checkboxes o si los podemos dejar como local variables y despues
+    // accederlos, pero bueno como solo hice la parte de frontend los deje asi
+    private CheckBox sombra;
+    private CheckBox gradiente;
+    private CheckBox biselado;
+
     public EffectsPane() {
         setStyle("-fx-background-color: #9f9f9f");
 
         // EffectsCheckboxes
         HBox effectsHBox = new HBox(10);
-        CheckBox sombra = new CheckBox("Sombra");
-        CheckBox gradiente = new CheckBox("Gradiente");
-        CheckBox biselado = new CheckBox("Biselado");
+        this.sombra = new CheckBox("Sombra");
+        this.gradiente = new CheckBox("Gradiente");
+        this.biselado = new CheckBox("Biselado");
         effectsHBox.getChildren().addAll(sombra, gradiente, biselado);
 
         // EffectsLabel
