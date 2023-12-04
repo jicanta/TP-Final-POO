@@ -161,7 +161,7 @@ public class PaintPane extends BorderPane {
 			if(startPoint.equals(eventPoint) && selectionButton.isSelected()) {
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
-				List<FigureComposition> compositionsToAdd = new ArrayList<>();
+				Set<FigureComposition> compositionsToAdd = new HashSet<>();
 				Figure prev = null;
 				for (Figure figure : canvasState.figures()) {
 					if (figure.figureBelongs(eventPoint)) {
@@ -197,7 +197,10 @@ public class PaintPane extends BorderPane {
 				double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
 				double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
 				for (Figure selectedFigure : selectedFigures){
+					Color auxColor = figureColorMap.get(selectedFigure);
+					figureColorMap.remove(selectedFigure);
 					selectedFigure.moveFigure(diffX, diffY);
+					figureColorMap.put(selectedFigure, auxColor);
 				}
 				if(!selectedFigures.isEmpty()) {
 					redrawCanvas();
@@ -208,6 +211,7 @@ public class PaintPane extends BorderPane {
 		deleteButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
 				canvasState.deleteFigure(figure);
+				figureColorMap.remove(figure); //TODO: por las dudas borro a la figura del mapa de colores
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -217,7 +221,10 @@ public class PaintPane extends BorderPane {
 
 		rotateRightButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
+				Color auxColor = figureColorMap.get(figure);
+				figureColorMap.remove(figure);
 				canvasState.rotateFigure(figure);
+				figureColorMap.put(figure, auxColor);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -226,9 +233,11 @@ public class PaintPane extends BorderPane {
 		});
 
 		flipHButton.setOnAction(event -> {
-			System.out.println(selectedFigures);
 			for (Figure figure : selectedFigures){
+				Color auxColor = figureColorMap.get(figure);
+				figureColorMap.remove(figure);
 				canvasState.flipHFigure(figure);
+				figureColorMap.put(figure, auxColor);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -238,7 +247,10 @@ public class PaintPane extends BorderPane {
 
 		flipVButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
+				Color auxColor = figureColorMap.get(figure); //TODO: el problema consiste en que el mapa de colores "pierde" el rastro de la figura ya que esta cambia de atributos.
+				figureColorMap.remove(figure);
 				canvasState.flipVFigure(figure);
+				figureColorMap.put(figure, auxColor);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -248,7 +260,10 @@ public class PaintPane extends BorderPane {
 
 		augmentButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
+				Color auxColor = figureColorMap.get(figure);
+				figureColorMap.remove(figure);
 				canvasState.augmentFigure(figure);
+				figureColorMap.put(figure, auxColor);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -258,7 +273,10 @@ public class PaintPane extends BorderPane {
 
 		reduceButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
+				Color auxColor = figureColorMap.get(figure);
+				figureColorMap.remove(figure);
 				canvasState.reduceFigure(figure);
+				figureColorMap.put(figure, auxColor);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -293,7 +311,6 @@ public class PaintPane extends BorderPane {
 	void redrawCanvas() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		for(Figure figure : canvasState.figures()) {
-			boolean foundInComposition = false;
 			if (selectedFigures.contains(figure)) {
 				gc.setStroke(Color.RED);
 			} else {
@@ -304,31 +321,6 @@ public class PaintPane extends BorderPane {
 			se pintan todos del mismo color pero bueno eso */
 			gc.setFill(figureColorMap.get(figure));
 			paintFigure(figure);
-			/* //TODO: REVISAR CODIGO, QUEDO MUY FEO
-			for(FigureComposition figureComposition : figureCompositions){
-				if(figureComposition.contains(figure)){
-					foundInComposition = true;
-					if(selectedFigures.contains(figure)){
-						figureComposition.isSelected = true;
-					}
-					if(figureComposition.isSelected){
-						gc.setStroke(Color.RED); //TODO: (COMENTARIO X SI SE ENTIENDE EL CODIGO) SI LA COMPOSICION ESTA SELECCIONADA, EL BORDE DE TODAS LAS FIGURAS DEBE SER ROJO
-					}
-					for(Figure figureToPaint : figureComposition){
-						 TODO: mismo comentario que antes
-                        gc.setFill(figureColorMap.get(figureToPaint));
-						paintFigure(figureToPaint);
-					}
-				}
-			}
-			if(!foundInComposition){
-                gc.setFill(figureColorMap.get(figure));
-				paintFigure(figure);
-			}
-		}
-		for (FigureComposition figureComposition : figureCompositions){
-			figureComposition.isSelected = false; //TODO: (COMENTARIO X SI NO SE ENTIENDE EL CODIGO) "reseteo" los flag que indican si las compos estan seleccionadas.
-		*/
 		}
 	}
 
