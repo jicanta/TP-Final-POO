@@ -2,6 +2,8 @@ package backend.model;
 
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.Objects;
+
 public class Ellipse implements Figure {
 
     protected Point centerPoint;
@@ -79,7 +81,7 @@ public class Ellipse implements Figure {
     @Override
     public boolean isInside(Rectangle rectangle) {
         return rectangle.figureBelongs(new Point(centerPoint.getX() + sMayorAxis / 2, centerPoint.getY())) &&
-                rectangle.figureBelongs(new Point(centerPoint.getY() - sMayorAxis / 2, centerPoint.getY())) &&
+                rectangle.figureBelongs(new Point(centerPoint.getX() - sMayorAxis / 2, centerPoint.getY())) &&
                 rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() + sMinorAxis / 2)) &&
                 rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() - sMinorAxis / 2));
     }
@@ -91,4 +93,9 @@ public class Ellipse implements Figure {
                 && Double.compare(sMinorAxis, p.getsMinorAxis()) == 0);
     }
 
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(centerPoint, sMayorAxis, sMinorAxis);
+    }
 }

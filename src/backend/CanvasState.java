@@ -3,6 +3,7 @@ package backend;
 import backend.model.Figure;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CanvasState {
@@ -47,7 +48,7 @@ public class CanvasState {
         addFigure(figure);
     }
 
-    public Iterable<Figure> figures() {
+    public List<Figure> figures() {
         return new ArrayList<>(list);
     }
 

@@ -1,0 +1,8 @@
+# IDE folder
+.idea
+
+# Build folder
+out
+
+# Iml files
+*.iml

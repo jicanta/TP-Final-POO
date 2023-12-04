@@ -1,5 +1,7 @@
 package backend.model;
 
+import java.util.Objects;
+
 public class Point {
     /* TODO: para mi las coordenadas x e y tienen que ser final, en las guias siempre decian eso como q no es que le cambias
     las coordenadas a un punto sino que creas un nuevo punto. Encima para girar, voltear, escalar, siempre hacemos eso de
@@ -31,6 +33,11 @@ public class Point {
     @Override
     public boolean equals(Object obj) {
         return this == obj || (obj instanceof Point p && Double.compare(p.x, x) == 0 && Double.compare(p.y, y) == 0);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(x, y);
     }
 
 }

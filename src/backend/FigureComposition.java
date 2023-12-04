@@ -5,6 +5,7 @@ import backend.model.Figure;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class FigureComposition implements Iterable<Figure>{
 
@@ -15,56 +16,29 @@ public class FigureComposition implements Iterable<Figure>{
         compositionList = new ArrayList<>();
     }
 
-    public void add(Figure fig){
-        compositionList.add(fig);
+    public List<Figure> getList(){
+        return this.compositionList;
     }
 
-    public void addList(ArrayList<Figure> figuresList){
-        compositionList.addAll(figuresList);
-    }
-
-    public void deleteComposition(CanvasState canvasState){
-        for (Figure fig : compositionList){
-            canvasState.deleteFigure(fig);
-        }
+    public void addAll(Set<Figure> figures){
+        compositionList.addAll(figures);
     }
 
     public boolean contains(Figure fig){
         return compositionList.contains(fig);
     }
 
-    public void rotateComposition(CanvasState canvasState){
-        for(Figure fig : compositionList){
-            canvasState.rotateFigure(fig);
-        }
-    }
-
-    public void flipHComposition(CanvasState canvasState){
-        for(Figure fig : compositionList){
-            canvasState.flipHFigure(fig);
-        }
-    }
-
-    public void flipVComposition(CanvasState canvasState){
-        for(Figure fig : compositionList){
-            canvasState.flipVFigure(fig);
-        }
-    }
-
-    public void augmentComposition(CanvasState canvasState){
-        for(Figure fig : compositionList){
-            canvasState.augmentFigure(fig);
-        }
-    }
-
-    public void reduceComposition(CanvasState canvasState){
-        for(Figure fig : compositionList){
-            canvasState.reduceFigure(fig);
-        }
-    }
-
     @Override
     public Iterator<Figure> iterator() {
         return compositionList.iterator();
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder string = new StringBuilder();
+        for (Figure figure : this){
+            string.append(figure.toString()+", ");
+        }
+        return string.toString();
     }
 }
