@@ -13,13 +13,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
-import java.sql.SQLOutput;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PaintPane extends BorderPane {
 
@@ -54,7 +48,7 @@ public class PaintPane extends BorderPane {
 	Point startPoint;
 
 	// Lista de figuras seleccionadas
-	ArrayList<Figure> selectedFigures = new ArrayList<>();
+	Set<Figure> selectedFigures = new HashSet<>();
 	// Lista de agrupaciones de figuras
 	ArrayList<FigureComposition> figureCompositions = new ArrayList<>();
 
@@ -95,7 +89,6 @@ public class PaintPane extends BorderPane {
 				return ;
 			}
 
-
 			if(selectionButton.isSelected()) {
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
@@ -104,7 +97,6 @@ public class PaintPane extends BorderPane {
 					if(figure.isInside(selectionRect)) {
 						found = true;
 						selectedFigures.add(figure);
-						// borrar: label.append(figure.toString());
 					}
 				}
 				if (found) {
@@ -159,22 +151,35 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
+
+		/* no me gusta mucho toda esta parte del codigo pero probe iterando con la lista al reves
+		   y no funca, tipo si selecciono uno se selecciona el de atras tambien
+		 */
+
 		canvas.setOnMouseClicked(event -> {
 			Point eventPoint = new Point(event.getX(), event.getY()); // TODO: STARTPOINT NO LO COMPARO CON NULL XQ NO LO IGUALE A NULL ANTES
-			if(/* startPoint != null && */ startPoint.equals(eventPoint) && selectionButton.isSelected()) {
+			if(startPoint.equals(eventPoint) && selectionButton.isSelected()) {
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
+				List<FigureComposition> compositionsToAdd = new ArrayList<>();
 				Figure prev = null;
-				// TODO: ver si se puede hacer mas eficiente recorriendo la lista al reves
 				for (Figure figure : canvasState.figures()) {
-					if(figure.figureBelongs(eventPoint)) {
+					if (figure.figureBelongs(eventPoint)) {
 						selectedFigures.remove(prev);
 						found = true;
 						selectedFigures.add(figure);
-						label.append(figure.toString());
+						for (FigureComposition composition : figureCompositions) {
+							if (composition.contains(figure)) {
+								compositionsToAdd.add(composition);
+							}
+						}
 						prev = figure;
 					}
 				}
+				for (FigureComposition composition : compositionsToAdd) {
+					selectedFigures.addAll(composition.getList());
+				}
+				label.append(selectedFigures);
 				if (found) {
 					statusPane.updateStatus(label.toString());
 				} else {
@@ -200,22 +205,9 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-		deleteButton.setOnAction(event -> { //TODO: CREO QUE ESTA MAL EL REMOVE CUANDO ITERAS
-			List<Figure> toDelete = new ArrayList<>();
-			boolean foundInComposition = false;
-			for(Figure selectedFigure : selectedFigures) {
-				for (FigureComposition composition : figureCompositions){
-					if(composition.contains(selectedFigure)){
-						toDelete.addAll(composition.getList());
-						figureCompositions.remove(composition);
-					}
-				}
-				if(!foundInComposition){
-					toDelete.add(selectedFigure);
-				}
-			}
-			for (Figure fig : selectedFigures){
-				canvasState.deleteFigure(fig);
+		deleteButton.setOnAction(event -> {
+			for (Figure figure : selectedFigures){
+				canvasState.deleteFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -224,17 +216,8 @@ public class PaintPane extends BorderPane {
 		});
 
 		rotateRightButton.setOnAction(event -> {
-			boolean foundInComposition = false;
-			for(Figure selectedFigure : selectedFigures) {
-				for (FigureComposition composition : figureCompositions){
-					if(composition.contains(selectedFigure)){
-						composition.rotateComposition();
-						foundInComposition = true;
-					}
-				}
-				if(!foundInComposition){
-					canvasState.rotateFigure(selectedFigure);
-				}
+			for (Figure figure : selectedFigures){
+				canvasState.rotateFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -243,17 +226,9 @@ public class PaintPane extends BorderPane {
 		});
 
 		flipHButton.setOnAction(event -> {
-			boolean foundInComposition = false;
-			for(Figure selectedFigure : selectedFigures) {
-				for (FigureComposition composition : figureCompositions){
-					if(composition.contains(selectedFigure)){
-						composition.flipHComposition();
-						foundInComposition = true;
-					}
-				}
-				if(!foundInComposition){
-					canvasState.flipHFigure(selectedFigure);
-				}
+			System.out.println(selectedFigures);
+			for (Figure figure : selectedFigures){
+				canvasState.flipHFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -262,17 +237,8 @@ public class PaintPane extends BorderPane {
 		});
 
 		flipVButton.setOnAction(event -> {
-			boolean foundInComposition = false;
-			for(Figure selectedFigure : selectedFigures) {
-				for (FigureComposition composition : figureCompositions){
-					if(composition.contains(selectedFigure)){
-						composition.flipVComposition();
-						foundInComposition = true;
-					}
-				}
-				if(!foundInComposition){
-					canvasState.flipVFigure(selectedFigure);
-				}
+			for (Figure figure : selectedFigures){
+				canvasState.flipVFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -281,17 +247,8 @@ public class PaintPane extends BorderPane {
 		});
 
 		augmentButton.setOnAction(event -> {
-			boolean foundInComposition = false;
-			for(Figure selectedFigure : selectedFigures) {
-				for (FigureComposition figureComposition : figureCompositions){
-					if(figureComposition.contains(selectedFigure)){
-						figureComposition.augmentComposition();
-						foundInComposition = true;
-					}
-				}
-				if(!foundInComposition){
-					canvasState.augmentFigure(selectedFigure);
-				}
+			for (Figure figure : selectedFigures){
+				canvasState.augmentFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -300,19 +257,8 @@ public class PaintPane extends BorderPane {
 		});
 
 		reduceButton.setOnAction(event -> {
-			List<FigureComposition> toAdd = new ArrayList<>();
-			for(Figure selectedFigure : selectedFigures) {
-				for (FigureComposition figureComposition : figureCompositions){
-					if(figureComposition.contains(selectedFigure) && !toAdd.contains(figureComposition)){
-						toAdd.add(figureComposition);
-					}
-				}
-			}
-			for(FigureComposition comp : toAdd){
-				selectedFigures.addAll(comp.getList());
-			}
-			for(Figure fig : selectedFigures){
-				canvasState.reduceFigure(fig);
+			for (Figure figure : selectedFigures){
+				canvasState.reduceFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -322,26 +268,22 @@ public class PaintPane extends BorderPane {
 
 		groupButton.setOnAction(event -> {
 			if(!selectedFigures.isEmpty()) {
-				FigureComposition figureComposition = new FigureComposition(canvasState);
-				figureComposition.addList(selectedFigures);
+				FigureComposition figureComposition = new FigureComposition();
+				figureComposition.addAll(selectedFigures);
 				figureCompositions.add(figureComposition);  //TODO: NOSE SI ESTOY MEZCLANDO FRONT CON BACK
 				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
 
-		ungroupButton.setOnAction(event -> { //TODO: NO SE PUEDE ELIMINAR UN ELEM DE LA LISTA QUE SE ITERA
-			/* for(Figure selectedFigure : selectedFigures){
-				for (FigureComposition figureComposition : figureCompositions){
-					if(figureComposition.contains(selectedFigure)){
-						figureCompositions.remove(figureComposition);
-					}
-				}
+		ungroupButton.setOnAction(event -> {
+			for(Figure selectedFigure : selectedFigures){
+                figureCompositions.removeIf(figureComposition -> figureComposition.contains(selectedFigure));
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
 				redrawCanvas();
-			}*/
+			}
 		});
 
 		setLeft(buttonsBox);
@@ -352,12 +294,17 @@ public class PaintPane extends BorderPane {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		for(Figure figure : canvasState.figures()) {
 			boolean foundInComposition = false;
-			if(selectedFigures.contains(figure)) {
+			if (selectedFigures.contains(figure)) {
 				gc.setStroke(Color.RED);
 			} else {
 				gc.setStroke(lineColor);
 			}
-														//TODO: REVISAR CODIGO, QUEDO MUY FEO
+
+			/* comentario de jose: no se podria hacer asi directamente? igual no funca cuando apreto algun boton
+			se pintan todos del mismo color pero bueno eso */
+			gc.setFill(figureColorMap.get(figure));
+			paintFigure(figure);
+			/* //TODO: REVISAR CODIGO, QUEDO MUY FEO
 			for(FigureComposition figureComposition : figureCompositions){
 				if(figureComposition.contains(figure)){
 					foundInComposition = true;
@@ -368,7 +315,7 @@ public class PaintPane extends BorderPane {
 						gc.setStroke(Color.RED); //TODO: (COMENTARIO X SI SE ENTIENDE EL CODIGO) SI LA COMPOSICION ESTA SELECCIONADA, EL BORDE DE TODAS LAS FIGURAS DEBE SER ROJO
 					}
 					for(Figure figureToPaint : figureComposition){
-						/* TODO: mismo comentario que antes */
+						 TODO: mismo comentario que antes
                         gc.setFill(figureColorMap.get(figureToPaint));
 						paintFigure(figureToPaint);
 					}
@@ -381,8 +328,11 @@ public class PaintPane extends BorderPane {
 		}
 		for (FigureComposition figureComposition : figureCompositions){
 			figureComposition.isSelected = false; //TODO: (COMENTARIO X SI NO SE ENTIENDE EL CODIGO) "reseteo" los flag que indican si las compos estan seleccionadas.
+		*/
 		}
 	}
+
+	// btw esta funcion me parece medio al pedo
 	private void paintFigure(Figure figure){
 		figure.paint(gc);
 	}

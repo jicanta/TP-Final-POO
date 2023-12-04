@@ -2,6 +2,8 @@ package backend.model;
 
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.Objects;
+
 public class Rectangle implements Figure {
 
     private Point topLeft, bottomRight;
@@ -97,5 +99,10 @@ public class Rectangle implements Figure {
     @Override
     public boolean isInside(Rectangle rectangle) {
         return rectangle.figureBelongs(topLeft) && rectangle.figureBelongs(bottomRight);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(topLeft, bottomRight);
     }
 }
