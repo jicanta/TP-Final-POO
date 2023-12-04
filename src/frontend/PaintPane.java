@@ -332,7 +332,9 @@ public class PaintPane extends BorderPane {
 		}
 	}
 
-	// btw esta funcion me parece medio al pedo
+	/* TODO: PROBLEMONNNN mezclando front con back (le estoy pasando gc) juanpa fijate si cuando arreglas
+	   lo de los colores podes arreglar esto :)
+	*/
 	private void paintFigure(Figure figure){
 		figure.paint(gc);
 	}
