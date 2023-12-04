@@ -55,12 +55,16 @@ public class PaintPane extends BorderPane {
 	// StatusBar
 	StatusPane statusPane;
 
+	// EffectsPane
+	EffectsPane effectsPane;
+
 	// Colores de relleno de cada figura
 	Map<Figure, Color> figureColorMap = new HashMap<>();
 
-	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
+	public PaintPane(CanvasState canvasState, StatusPane statusPane, EffectsPane effectsPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
+		this.effectsPane = effectsPane;
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, groupButton, ungroupButton ,rotateRightButton, flipHButton, flipVButton, augmentButton, reduceButton};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
@@ -108,7 +112,7 @@ public class PaintPane extends BorderPane {
 				redrawCanvas();
 
 			} else {
-				Figure newFigure = null;
+				Figure newFigure;
 				/* TODO: el uso de tantos if else me da dudas, igual nose como se haria sino pero pongo por las dudas */
 				if (rectangleButton.isSelected()) {
 					newFigure = new Rectangle(startPoint, endPoint);
@@ -141,7 +145,7 @@ public class PaintPane extends BorderPane {
 			for(Figure figure : canvasState.figures()) {
 				if(figure.figureBelongs(eventPoint)) {
 					found = true;
-					label.append(figure.toString());
+					label.append(figure);
 				}
 			}
 			if(found) {
