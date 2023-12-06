@@ -7,7 +7,7 @@ import javafx.scene.paint.Paint;
 
 public abstract class FigureFront {
     private Color color;
-    private boolean shadow = true;
+    private boolean shadow;
     private boolean bevel;
     private boolean gradient;
 

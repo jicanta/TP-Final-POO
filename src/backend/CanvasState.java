@@ -19,33 +19,23 @@ public class CanvasState {
     }
 
     public void rotateFigure(Figure figure) {
-        deleteFigure(figure);
         figure.rotateR();
-        addFigure(figure);
     }
 
     public void flipHFigure(Figure figure){
-        deleteFigure(figure);
         figure.flipHorizontally();
-        addFigure(figure);
     }
 
     public void flipVFigure(Figure figure){
-        deleteFigure(figure);
         figure.flipVertically();
-        addFigure(figure);
     }
 
     public void augmentFigure(Figure figure){
-        deleteFigure(figure);
         figure.augment();
-        addFigure(figure);
     }
 
     public void reduceFigure(Figure figure){
-        deleteFigure(figure);
         figure.reduce();
-        addFigure(figure);
     }
 
     public List<Figure> figures() {
