@@ -151,6 +151,27 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
+		effectsPane.sombra.setOnAction(event -> {
+			if(!selectedFigures.isEmpty()) {
+				updateSelectedFigures();
+				redrawCanvas();
+			}
+		});
+
+		effectsPane.biselado.setOnAction(event -> {
+			if(!selectedFigures.isEmpty()) {
+				updateSelectedFigures();
+				redrawCanvas();
+			}
+		});
+
+		effectsPane.gradiente.setOnAction(event -> {
+			if(!selectedFigures.isEmpty()) {
+				updateSelectedFigures();
+				redrawCanvas();
+			}
+		});
+
 		canvas.setOnMouseMoved(event -> {
 			Point eventPoint = new Point(event.getX(), event.getY());
 			boolean found = false;
@@ -161,10 +182,7 @@ public class PaintPane extends BorderPane {
 					label.append(figure);
 				}
 			}
-			if(!selectedFigures.isEmpty()) {
-				updateSelectedFigures();
-				redrawCanvas();
-			}
+
 			if(found) {
 				statusPane.updateStatus(label.toString());
 			} else {

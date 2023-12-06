@@ -12,9 +12,9 @@ public class EffectsPane extends BorderPane {
 
     // TODO: nose si hace falta guardar los checkboxes o si los podemos dejar como local variables y despues
     // accederlos, pero bueno como solo hice la parte de frontend los deje asi
-    private CheckBox sombra;
-    private CheckBox gradiente;
-    private CheckBox biselado;
+    public CheckBox sombra;
+    public CheckBox gradiente;
+    public CheckBox biselado;
 
     public boolean checkedShadow() {
         return sombra.isSelected();
