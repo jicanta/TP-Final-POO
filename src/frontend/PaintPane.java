@@ -66,6 +66,14 @@ public class PaintPane extends BorderPane {
 	// Figura del back - Figura del front
 	Map<Figure, FigureFront> figuresFrontMap = new HashMap<>();
 
+	public void updateSelectedFigures() {
+		for(Figure figure : selectedFigures) {
+			FigureFront figureFront = figuresFrontMap.get(figure);
+			figureFront.updateEffects(effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient());
+			figuresFrontMap.put(figure, figureFront);
+		}
+	}
+
 	public PaintPane(CanvasState canvasState, StatusPane statusPane, EffectsPane effectsPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
@@ -119,28 +127,27 @@ public class PaintPane extends BorderPane {
 			} else {
 				Figure newFigure;
 				if (rectangleButton.isSelected()) {
-				newFigure = new Rectangle(startPoint, endPoint);
-				figuresFrontMap.put(newFigure, new RectangleFront((Rectangle) newFigure, fillColorPicker.getValue()));
-			} else if (circleButton.isSelected()) {
-				double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
-				newFigure = new Circle(startPoint, circleRadius);
-				figuresFrontMap.put(newFigure, new CircleFront((Circle) newFigure, fillColorPicker.getValue()));
-			} else if (squareButton.isSelected()) {
-				double size = Math.abs(endPoint.getX() - startPoint.getX());
-				newFigure = new Square(startPoint, size);
-				figuresFrontMap.put(newFigure, new SquareFront((Square) newFigure, fillColorPicker.getValue()));
-			} else if (ellipseButton.isSelected()) {
-				Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
-				double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
-				double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
-				newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis);
-				figuresFrontMap.put(newFigure, new EllipseFront((Ellipse) newFigure,fillColorPicker.getValue()));
-			}
-			else {
-				return;
-			}
-			canvasState.addFigure(newFigure);
-			redrawCanvas();
+					newFigure = new Rectangle(startPoint, endPoint);
+					figuresFrontMap.put(newFigure, new RectangleFront((Rectangle) newFigure, fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
+				} else if (circleButton.isSelected()) {
+					double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
+					newFigure = new Circle(startPoint, circleRadius);
+					figuresFrontMap.put(newFigure, new CircleFront((Circle) newFigure, fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
+				} else if (squareButton.isSelected()) {
+					double size = Math.abs(endPoint.getX() - startPoint.getX());
+					newFigure = new Square(startPoint, size);
+					figuresFrontMap.put(newFigure, new SquareFront((Square) newFigure, fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
+				} else if (ellipseButton.isSelected()) {
+					Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
+					double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
+					double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
+					newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis);
+					figuresFrontMap.put(newFigure, new EllipseFront((Ellipse) newFigure,fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
+				} else {
+					return;
+				}
+				canvasState.addFigure(newFigure);
+				redrawCanvas();
 			}
 		});
 
@@ -153,6 +160,10 @@ public class PaintPane extends BorderPane {
 					found = true;
 					label.append(figure);
 				}
+			}
+			if(!selectedFigures.isEmpty()) {
+				updateSelectedFigures();
+				redrawCanvas();
 			}
 			if(found) {
 				statusPane.updateStatus(label.toString());
@@ -192,10 +203,15 @@ public class PaintPane extends BorderPane {
 				}
 				if (found) {
 					statusPane.updateStatus(label.toString());
+					for(Figure figure : selectedFigures) {
+						FigureFront curFrontFigure = figuresFrontMap.get(figure);
+						effectsPane.updateStatus(curFrontFigure.hasShadow(), curFrontFigure.hasBevel(), curFrontFigure.hasGradient());
+					}
 				} else {
 					selectedFigures.clear();
 					statusPane.updateStatus("Ninguna figura encontrada");
 				}
+
 				redrawCanvas();
 			}
 		});

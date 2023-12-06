@@ -6,8 +6,8 @@ import javafx.scene.paint.*;
 
 public abstract class QuadrilateralFront extends FigureFront {
     private final Rectangle backQuadrilateral;
-    public QuadrilateralFront(Rectangle backRectangle, Color color){
-        super(color);
+    public QuadrilateralFront(Rectangle backRectangle, Color color, boolean shadow, boolean bevel, boolean gradient){
+        super(color, shadow, bevel, gradient);
         this.backQuadrilateral = backRectangle;
     }
     @Override

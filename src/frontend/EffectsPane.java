@@ -16,6 +16,42 @@ public class EffectsPane extends BorderPane {
     private CheckBox gradiente;
     private CheckBox biselado;
 
+    public boolean checkedShadow() {
+        return sombra.isSelected();
+    }
+
+    public void setShadow(boolean val) {
+        sombra.setSelected(val);
+    }
+
+    public boolean checkedBevel() {
+        return biselado.isSelected();
+    }
+
+    public void setBevel(boolean val) {
+        biselado.setSelected(val);
+    }
+
+    public boolean checkedGradient() {
+        return gradiente.isSelected();
+    }
+
+    public void setGradient(boolean val) {
+        gradiente.setSelected(val);
+    }
+
+    public void updateStatus(boolean shadow, boolean bevel, boolean gradient) {
+        setShadow(shadow);
+        setBevel(bevel);
+        setGradient(gradient);
+    }
+
+    public boolean statusChanged(boolean initialShadow, boolean initialBevel, boolean initialGradient) {
+        return checkedShadow() != initialShadow || checkedBevel() != initialBevel || checkedGradient() != initialGradient;
+    }
+
+
+
     public EffectsPane() {
         setStyle("-fx-background-color: #9f9f9f");
 

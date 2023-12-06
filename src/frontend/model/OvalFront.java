@@ -7,8 +7,8 @@ import javafx.scene.shape.ArcType;
 
 public abstract class OvalFront extends FigureFront {
     private final Ellipse backOval;
-    public OvalFront(Ellipse backOval, Color color) {
-        super(color);
+    public OvalFront(Ellipse backOval, Color color, boolean shadow, boolean bevel, boolean gradient) {
+        super(color, shadow, bevel, gradient);
         this.backOval = backOval;
     }
     @Override
