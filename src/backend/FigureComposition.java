@@ -7,10 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class FigureComposition implements Iterable<Figure>{
+public class FigureComposition {
 
     private List<Figure> compositionList;
-    public boolean isSelected = false;
 
     public FigureComposition(){
         compositionList = new ArrayList<>();
@@ -29,14 +28,9 @@ public class FigureComposition implements Iterable<Figure>{
     }
 
     @Override
-    public Iterator<Figure> iterator() {
-        return compositionList.iterator();
-    }
-
-    @Override
     public String toString(){
         StringBuilder string = new StringBuilder();
-        for (Figure figure : this){
+        for (Figure figure : this.compositionList){
             string.append(figure.toString()+", ");
         }
         return string.toString();

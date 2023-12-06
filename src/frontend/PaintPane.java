@@ -3,6 +3,11 @@ package frontend;
 import backend.CanvasState;
 import backend.FigureComposition;
 import backend.model.*;
+import frontend.model.FigureFront;
+import frontend.model.Figures.CircleFront;
+import frontend.model.Figures.EllipseFront;
+import frontend.model.Figures.RectangleFront;
+import frontend.model.Figures.SquareFront;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
@@ -57,6 +62,9 @@ public class PaintPane extends BorderPane {
 
 	// EffectsPane
 	EffectsPane effectsPane;
+
+	// Figura del back - Figura del front
+	Map<Figure, FigureFront> figuresFrontMap = new HashMap<>();
 
 	// Colores de relleno de cada figura
 	Map<Figure, Color> figureColorMap = new HashMap<>();
@@ -113,28 +121,30 @@ public class PaintPane extends BorderPane {
 
 			} else {
 				Figure newFigure;
-				/* TODO: el uso de tantos if else me da dudas, igual nose como se haria sino pero pongo por las dudas */
 				if (rectangleButton.isSelected()) {
-					newFigure = new Rectangle(startPoint, endPoint);
-				} else if (circleButton.isSelected()) {
-					double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
-					newFigure = new Circle(startPoint, circleRadius);
-				} else if (squareButton.isSelected()) {
-					double size = Math.abs(endPoint.getX() - startPoint.getX());
-					newFigure = new Square(startPoint, size);
-				} else if (ellipseButton.isSelected()) {
-					Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
-					double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
-					double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
-					newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis);
-				}
-				else {
-					return;
-				}
-				figureColorMap.put(newFigure, fillColorPicker.getValue());
-				canvasState.addFigure(newFigure);
-				//startPoint = null; TODO: POR DEFAULT LO IGUALABA A NULL, NO ENTIENDO EL PORQUE
-				redrawCanvas();
+				newFigure = new Rectangle(startPoint, endPoint);
+				figuresFrontMap.put(newFigure, new RectangleFront((Rectangle) newFigure));
+			} else if (circleButton.isSelected()) {
+				double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
+				newFigure = new Circle(startPoint, circleRadius);
+				figuresFrontMap.put(newFigure, new CircleFront((Circle) newFigure));
+			} else if (squareButton.isSelected()) {
+				double size = Math.abs(endPoint.getX() - startPoint.getX());
+				newFigure = new Square(startPoint, size);
+				figuresFrontMap.put(newFigure, new SquareFront((Square) newFigure));
+			} else if (ellipseButton.isSelected()) {
+				Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
+				double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
+				double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
+				newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis);
+				figuresFrontMap.put(newFigure, new EllipseFront((Ellipse) newFigure));
+			}
+			else {
+				return;
+			}
+			figureColorMap.put(newFigure, fillColorPicker.getValue());
+			canvasState.addFigure(newFigure);
+			redrawCanvas();
 			}
 		});
 
@@ -201,10 +211,7 @@ public class PaintPane extends BorderPane {
 				double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
 				double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
 				for (Figure selectedFigure : selectedFigures){
-					Color auxColor = figureColorMap.get(selectedFigure);
-					figureColorMap.remove(selectedFigure);
 					selectedFigure.moveFigure(diffX, diffY);
-					figureColorMap.put(selectedFigure, auxColor);
 				}
 				if(!selectedFigures.isEmpty()) {
 					redrawCanvas();
@@ -225,10 +232,7 @@ public class PaintPane extends BorderPane {
 
 		rotateRightButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
-				Color auxColor = figureColorMap.get(figure);
-				figureColorMap.remove(figure);
 				canvasState.rotateFigure(figure);
-				figureColorMap.put(figure, auxColor);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -238,10 +242,7 @@ public class PaintPane extends BorderPane {
 
 		flipHButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
-				Color auxColor = figureColorMap.get(figure);
-				figureColorMap.remove(figure);
 				canvasState.flipHFigure(figure);
-				figureColorMap.put(figure, auxColor);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -251,10 +252,7 @@ public class PaintPane extends BorderPane {
 
 		flipVButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
-				Color auxColor = figureColorMap.get(figure); //TODO: el problema consiste en que el mapa de colores "pierde" el rastro de la figura ya que esta cambia de atributos.
-				figureColorMap.remove(figure);
 				canvasState.flipVFigure(figure);
-				figureColorMap.put(figure, auxColor);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -264,10 +262,7 @@ public class PaintPane extends BorderPane {
 
 		augmentButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
-				Color auxColor = figureColorMap.get(figure);
-				figureColorMap.remove(figure);
 				canvasState.augmentFigure(figure);
-				figureColorMap.put(figure, auxColor);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -277,10 +272,7 @@ public class PaintPane extends BorderPane {
 
 		reduceButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
-				Color auxColor = figureColorMap.get(figure);
-				figureColorMap.remove(figure);
 				canvasState.reduceFigure(figure);
-				figureColorMap.put(figure, auxColor);
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -320,18 +312,9 @@ public class PaintPane extends BorderPane {
 			} else {
 				gc.setStroke(lineColor);
 			}
+			figuresFrontMap.get(figure).drawFigure(gc);
 
-			/* comentario de jose: no se podria hacer asi directamente? igual no funca cuando apreto algun boton
-			se pintan todos del mismo color pero bueno eso */
-			gc.setFill(figureColorMap.get(figure));
-			paintFigure(figure);
 		}
 	}
 
-	/* TODO: PROBLEMONNNN mezclando front con back (le estoy pasando gc) juanpa fijate si cuando arreglas
-	   lo de los colores podes arreglar esto :)
-	*/
-	private void paintFigure(Figure figure){
-		figure.paint(gc);
-	}
 }

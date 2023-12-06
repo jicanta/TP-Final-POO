@@ -42,9 +42,8 @@ public class Ellipse implements Figure {
     }
 
     @Override
-    public void paint(GraphicsContext gc){
-        gc.strokeOval(this.centerPoint.getX() - (this.sMayorAxis/2), this.centerPoint.getY() - (this.sMinorAxis/2), sMayorAxis, sMinorAxis);
-        gc.fillOval(this.centerPoint.getX() - (this.sMayorAxis/2), this.centerPoint.getY() - (this.sMinorAxis/2), sMayorAxis, sMinorAxis);
+    public Double[] getDrawParameters(){
+       return new Double[]{this.centerPoint.getX() - (this.sMayorAxis/2), this.centerPoint.getY() - (this.sMinorAxis/2), sMayorAxis, sMinorAxis};
     }
 
     @Override
@@ -84,18 +83,5 @@ public class Ellipse implements Figure {
                 rectangle.figureBelongs(new Point(centerPoint.getX() - sMayorAxis / 2, centerPoint.getY())) &&
                 rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() + sMinorAxis / 2)) &&
                 rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() - sMinorAxis / 2));
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || (obj instanceof Ellipse p && centerPoint.equals(p.getCenterPoint())
-                && Double.compare(sMayorAxis, p.getsMayorAxis()) == 0
-                && Double.compare(sMinorAxis, p.getsMinorAxis()) == 0);
-    }
-
-
-    @Override
-    public int hashCode(){
-        return Objects.hash(centerPoint, sMayorAxis, sMinorAxis);
     }
 }

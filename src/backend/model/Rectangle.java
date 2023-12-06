@@ -39,9 +39,8 @@ public class Rectangle implements Figure {
     }
 
     @Override
-    public void paint(GraphicsContext gc){
-        gc.fillRect(this.topLeft.getX(), this.topLeft.getY(), this.getWidth(), this.getHeight());
-        gc.strokeRect(this.topLeft.getX(), this.topLeft.getY(), this.getWidth(), this.getHeight());
+    public Double[] getDrawParameters(){
+        return new Double[]{this.topLeft.getX(), this.topLeft.getY(), this.getWidth(), this.getHeight()};
     }
 
     @Override
@@ -99,17 +98,5 @@ public class Rectangle implements Figure {
     @Override
     public boolean isInside(Rectangle rectangle) {
         return rectangle.figureBelongs(topLeft) && rectangle.figureBelongs(bottomRight);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || (obj instanceof Rectangle p && topLeft.equals(p.getTopLeft())
-                && bottomRight.equals(p.getBottomRight()));
-    }
-
-
-    @Override
-    public int hashCode(){
-        return Objects.hash(topLeft, bottomRight);
     }
 }
