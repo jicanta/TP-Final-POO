@@ -31,6 +31,10 @@ public class Ellipse implements Figure {
         return sMinorAxis;
     }
 
+    public double getRadius() {
+        return this.sMayorAxis/2;
+    }
+
     @Override
     public String toString() {
         return String.format("Elipse [Centro: %s, DMayor: %.2f, DMenor: %.2f]", centerPoint, sMayorAxis, sMinorAxis);

@@ -66,9 +66,6 @@ public class PaintPane extends BorderPane {
 	// Figura del back - Figura del front
 	Map<Figure, FigureFront> figuresFrontMap = new HashMap<>();
 
-	// Colores de relleno de cada figura
-	Map<Figure, Color> figureColorMap = new HashMap<>();
-
 	public PaintPane(CanvasState canvasState, StatusPane statusPane, EffectsPane effectsPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
@@ -123,26 +120,25 @@ public class PaintPane extends BorderPane {
 				Figure newFigure;
 				if (rectangleButton.isSelected()) {
 				newFigure = new Rectangle(startPoint, endPoint);
-				figuresFrontMap.put(newFigure, new RectangleFront((Rectangle) newFigure));
+				figuresFrontMap.put(newFigure, new RectangleFront((Rectangle) newFigure, fillColorPicker.getValue()));
 			} else if (circleButton.isSelected()) {
 				double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
 				newFigure = new Circle(startPoint, circleRadius);
-				figuresFrontMap.put(newFigure, new CircleFront((Circle) newFigure));
+				figuresFrontMap.put(newFigure, new CircleFront((Circle) newFigure, fillColorPicker.getValue()));
 			} else if (squareButton.isSelected()) {
 				double size = Math.abs(endPoint.getX() - startPoint.getX());
 				newFigure = new Square(startPoint, size);
-				figuresFrontMap.put(newFigure, new SquareFront((Square) newFigure));
+				figuresFrontMap.put(newFigure, new SquareFront((Square) newFigure, fillColorPicker.getValue()));
 			} else if (ellipseButton.isSelected()) {
 				Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
 				double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
 				double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
 				newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis);
-				figuresFrontMap.put(newFigure, new EllipseFront((Ellipse) newFigure));
+				figuresFrontMap.put(newFigure, new EllipseFront((Ellipse) newFigure,fillColorPicker.getValue()));
 			}
 			else {
 				return;
 			}
-			figureColorMap.put(newFigure, fillColorPicker.getValue());
 			canvasState.addFigure(newFigure);
 			redrawCanvas();
 			}
@@ -182,6 +178,7 @@ public class PaintPane extends BorderPane {
 						selectedFigures.remove(prev);
 						found = true;
 						selectedFigures.add(figure);
+						label.append(figure);
 						for (FigureComposition composition : figureCompositions) {
 							if (composition.contains(figure)) {
 								compositionsToAdd.add(composition);
@@ -193,7 +190,6 @@ public class PaintPane extends BorderPane {
 				for (FigureComposition composition : compositionsToAdd) {
 					selectedFigures.addAll(composition.getList());
 				}
-				label.append(selectedFigures);
 				if (found) {
 					statusPane.updateStatus(label.toString());
 				} else {
@@ -222,7 +218,6 @@ public class PaintPane extends BorderPane {
 		deleteButton.setOnAction(event -> {
 			for (Figure figure : selectedFigures){
 				canvasState.deleteFigure(figure);
-				figureColorMap.remove(figure); //TODO: por las dudas borro a la figura del mapa de colores
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
@@ -284,7 +279,7 @@ public class PaintPane extends BorderPane {
 			if(!selectedFigures.isEmpty()) {
 				FigureComposition figureComposition = new FigureComposition();
 				figureComposition.addAll(selectedFigures);
-				figureCompositions.add(figureComposition);  //TODO: NOSE SI ESTOY MEZCLANDO FRONT CON BACK
+				figureCompositions.add(figureComposition);
 				selectedFigures.clear();
 				redrawCanvas();
 			}
@@ -313,7 +308,6 @@ public class PaintPane extends BorderPane {
 				gc.setStroke(lineColor);
 			}
 			figuresFrontMap.get(figure).drawFigure(gc);
-
 		}
 	}
 
