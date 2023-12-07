@@ -88,6 +88,26 @@ public class PaintPane extends BorderPane {
 		selectedFigures.clear();
 	}
 
+	private void updateCheckBoxsBySelectedFigures() {
+		effectsPane.sombra.setIndeterminate(false);
+		effectsPane.biselado.setIndeterminate(false);
+		effectsPane.gradiente.setIndeterminate(false);
+		boolean allShadow = true;
+		boolean allBevel = true;
+		boolean allGradient = true;
+		for(Figure figure : selectedFigures) {
+			System.out.println(figure);
+			FigureFront curFrontFigure = figuresFrontMap.get(figure);
+			if(!curFrontFigure.hasShadow()) allShadow = false;
+			if(!curFrontFigure.hasBevel()) allBevel = false;
+			if(!curFrontFigure.hasGradient()) allGradient = false;
+		}
+		for(Figure figure : selectedFigures) {
+			FigureFront curFrontFigure = figuresFrontMap.get(figure);
+			effectsPane.updateStatus(curFrontFigure.hasShadow(), allShadow, curFrontFigure.hasBevel(), allBevel, curFrontFigure.hasGradient(), allGradient);
+		}
+	}
+
 	public PaintPane(CanvasState canvasState, StatusPane statusPane, EffectsPane effectsPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
@@ -151,10 +171,11 @@ public class PaintPane extends BorderPane {
 						selectedFigures.add(figure);
 					}
 				}
-				// TODO: AGREGAR GRUPOS COMPOSITION
 
 				if (found) {
+					updateCheckBoxsBySelectedFigures();
 					statusPane.updateStatus(label.toString());
+
 				} else {
 					selectedFigures.clear();
 					statusPane.updateStatus("Ninguna figura encontrada");
@@ -243,21 +264,8 @@ public class PaintPane extends BorderPane {
 					selectedFigures.addAll(composition.getList());
 				}
 				if (found) {
+					updateCheckBoxsBySelectedFigures();
 					statusPane.updateStatus(label.toString());
-					boolean allShadow = true;
-					boolean allBevel = true;
-					boolean allGradient = true;
-					for(Figure figure : selectedFigures) {
-						System.out.println(figure);
-						FigureFront curFrontFigure = figuresFrontMap.get(figure);
-						if(!curFrontFigure.hasShadow()) allShadow = false;
-						if(!curFrontFigure.hasBevel()) allBevel = false;
-						if(!curFrontFigure.hasGradient()) allGradient = false;
-					}
-					for(Figure figure : selectedFigures) {
-						FigureFront curFrontFigure = figuresFrontMap.get(figure);
-						effectsPane.updateStatus(curFrontFigure.hasShadow(), allShadow, curFrontFigure.hasBevel(), allBevel, curFrontFigure.hasGradient(), allGradient);
-					}
 				} else {
 					selectedFigures.clear();
 					statusPane.updateStatus("Ninguna figura encontrada");
