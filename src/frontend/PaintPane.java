@@ -67,6 +67,7 @@ public class PaintPane extends BorderPane {
 
 	// Figura del back - Figura del front
 	Map<Figure, FigureFront> figuresFrontMap = new HashMap<>();
+	
 
 	public void updateSelectedFigures() {
 		for(Figure figure : selectedFigures) {
@@ -81,6 +82,10 @@ public class PaintPane extends BorderPane {
 			updateSelectedFigures();
 			redrawCanvas();
 		}
+	}
+
+	private void clearSelectedFigures() {
+		selectedFigures.clear();
 	}
 
 	public PaintPane(CanvasState canvasState, StatusPane statusPane, EffectsPane effectsPane) {
@@ -103,19 +108,19 @@ public class PaintPane extends BorderPane {
 		gc.setLineWidth(1);
 
 		circleButton.setOnAction(event -> {
-			selectedFigures.clear();
+			clearSelectedFigures();
 		});
 
 		rectangleButton.setOnAction(event -> {
-			selectedFigures.clear();
+			clearSelectedFigures();
 		});
 
 		ellipseButton.setOnAction(event -> {
-			selectedFigures.clear();
+			clearSelectedFigures();
 		});
 
 		squareButton.setOnAction(event -> {
-			selectedFigures.clear();
+			clearSelectedFigures();
 		});
 
 		canvas.setOnMousePressed(event -> {
@@ -141,6 +146,8 @@ public class PaintPane extends BorderPane {
 						selectedFigures.add(figure);
 					}
 				}
+				// TODO: AGREGAR GRUPOS COMPOSITION
+
 				if (found) {
 					statusPane.updateStatus(label.toString());
 				} else {
@@ -232,9 +239,19 @@ public class PaintPane extends BorderPane {
 				}
 				if (found) {
 					statusPane.updateStatus(label.toString());
+					boolean allShadow = true;
+					boolean allBevel = true;
+					boolean allGradient = true;
+					for(Figure figure : selectedFigures) {
+						System.out.println(figure);
+						FigureFront curFrontFigure = figuresFrontMap.get(figure);
+						if(!curFrontFigure.hasShadow()) allShadow = false;
+						if(!curFrontFigure.hasBevel()) allBevel = false;
+						if(!curFrontFigure.hasGradient()) allGradient = false;
+					}
 					for(Figure figure : selectedFigures) {
 						FigureFront curFrontFigure = figuresFrontMap.get(figure);
-						effectsPane.updateStatus(curFrontFigure.hasShadow(), curFrontFigure.hasBevel(), curFrontFigure.hasGradient());
+						effectsPane.updateStatus(curFrontFigure.hasShadow(), allShadow, curFrontFigure.hasBevel(), allBevel, curFrontFigure.hasGradient(), allGradient);
 					}
 				} else {
 					selectedFigures.clear();

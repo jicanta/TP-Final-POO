@@ -12,6 +12,7 @@ public class EffectsPane extends BorderPane {
 
     // TODO: nose si hace falta guardar los checkboxes o si los podemos dejar como local variables y despues
     // accederlos, pero bueno como solo hice la parte de frontend los deje asi
+    // TODO: hacer getter de los checkbox en vez de que sean public?
     public CheckBox sombra;
     public CheckBox gradiente;
     public CheckBox biselado;
@@ -20,37 +21,59 @@ public class EffectsPane extends BorderPane {
         return sombra.isSelected();
     }
 
-    public void setShadow(boolean val) {
-        sombra.setSelected(val);
+    public void setShadow(boolean val, boolean isInAllFigures) {
+        if(!val) {
+            sombra.setSelected(false);
+        } else {
+            if(isInAllFigures) {
+                sombra.setSelected(true);
+            } else {
+                sombra.setIndeterminate(true);
+            }
+        }
     }
 
     public boolean checkedBevel() {
         return biselado.isSelected();
     }
 
-    public void setBevel(boolean val) {
-        biselado.setSelected(val);
+    public void setBevel(boolean val, boolean isInAllFigures) {
+        if(!val) {
+            biselado.setSelected(false);
+        } else {
+            if(isInAllFigures) {
+                biselado.setSelected(true);
+            } else {
+                biselado.setIndeterminate(true);
+            }
+        }
     }
 
     public boolean checkedGradient() {
         return gradiente.isSelected();
     }
 
-    public void setGradient(boolean val) {
-        gradiente.setSelected(val);
+    public void setGradient(boolean val, boolean isInAllFigures) {
+        if(!val) {
+            gradiente.setSelected(false);
+        } else {
+            if(isInAllFigures) {
+                gradiente.setSelected(true);
+            } else {
+                gradiente.setIndeterminate(true);
+            }
+        }
     }
 
-    public void updateStatus(boolean shadow, boolean bevel, boolean gradient) {
-        setShadow(shadow);
-        setBevel(bevel);
-        setGradient(gradient);
+    public void updateStatus(boolean shadow, boolean isShadowInAll, boolean bevel, boolean isBevelInAll, boolean gradient, boolean isGradientInAll) {
+        setShadow(shadow, isShadowInAll);
+        setBevel(bevel, isBevelInAll);
+        setGradient(gradient, isGradientInAll);
     }
 
     public boolean statusChanged(boolean initialShadow, boolean initialBevel, boolean initialGradient) {
         return checkedShadow() != initialShadow || checkedBevel() != initialBevel || checkedGradient() != initialGradient;
     }
-
-
 
     public EffectsPane() {
         setStyle("-fx-background-color: #9f9f9f");
