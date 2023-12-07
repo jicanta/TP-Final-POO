@@ -8,6 +8,8 @@ import frontend.model.Figures.CircleFront;
 import frontend.model.Figures.EllipseFront;
 import frontend.model.Figures.RectangleFront;
 import frontend.model.Figures.SquareFront;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
@@ -74,6 +76,13 @@ public class PaintPane extends BorderPane {
 		}
 	}
 
+	private void handleSelectedFigures() {
+		if (!selectedFigures.isEmpty()) {
+			updateSelectedFigures();
+			redrawCanvas();
+		}
+	}
+
 	public PaintPane(CanvasState canvasState, StatusPane statusPane, EffectsPane effectsPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
@@ -92,6 +101,22 @@ public class PaintPane extends BorderPane {
 		buttonsBox.setStyle("-fx-background-color: #999");
 		buttonsBox.setPrefWidth(100);
 		gc.setLineWidth(1);
+
+		circleButton.setOnAction(event -> {
+			selectedFigures.clear();
+		});
+
+		rectangleButton.setOnAction(event -> {
+			selectedFigures.clear();
+		});
+
+		ellipseButton.setOnAction(event -> {
+			selectedFigures.clear();
+		});
+
+		squareButton.setOnAction(event -> {
+			selectedFigures.clear();
+		});
 
 		canvas.setOnMousePressed(event -> {
 			startPoint = new Point(event.getX(), event.getY());
@@ -151,26 +176,12 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-		effectsPane.sombra.setOnAction(event -> {
-			if(!selectedFigures.isEmpty()) {
-				updateSelectedFigures();
-				redrawCanvas();
-			}
-		});
 
-		effectsPane.biselado.setOnAction(event -> {
-			if(!selectedFigures.isEmpty()) {
-				updateSelectedFigures();
-				redrawCanvas();
-			}
-		});
+		effectsPane.sombra.setOnAction(event -> handleSelectedFigures());
 
-		effectsPane.gradiente.setOnAction(event -> {
-			if(!selectedFigures.isEmpty()) {
-				updateSelectedFigures();
-				redrawCanvas();
-			}
-		});
+		effectsPane.biselado.setOnAction(event -> handleSelectedFigures());
+
+		effectsPane.gradiente.setOnAction(event -> handleSelectedFigures());
 
 		canvas.setOnMouseMoved(event -> {
 			Point eventPoint = new Point(event.getX(), event.getY());
