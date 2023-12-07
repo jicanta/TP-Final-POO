@@ -86,6 +86,7 @@ public class PaintPane extends BorderPane {
 
 	private void clearSelectedFigures() {
 		selectedFigures.clear();
+		redrawCanvas();
 	}
 
 	private void updateCheckBoxsBySelectedFigures() {
@@ -96,7 +97,6 @@ public class PaintPane extends BorderPane {
 		boolean allBevel = true;
 		boolean allGradient = true;
 		for(Figure figure : selectedFigures) {
-			System.out.println(figure);
 			FigureFront curFrontFigure = figuresFrontMap.get(figure);
 			if(!curFrontFigure.hasShadow()) allShadow = false;
 			if(!curFrontFigure.hasBevel()) allBevel = false;
@@ -126,6 +126,10 @@ public class PaintPane extends BorderPane {
 		buttonsBox.setStyle("-fx-background-color: #999");
 		buttonsBox.setPrefWidth(100);
 		gc.setLineWidth(1);
+
+		selectionButton.setOnAction(event -> {
+			clearSelectedFigures();
+		});
 
 		circleButton.setOnAction(event -> {
 			clearSelectedFigures();
@@ -175,7 +179,6 @@ public class PaintPane extends BorderPane {
 				if (found) {
 					updateCheckBoxsBySelectedFigures();
 					statusPane.updateStatus(label.toString());
-
 				} else {
 					selectedFigures.clear();
 					statusPane.updateStatus("Ninguna figura encontrada");
@@ -183,6 +186,7 @@ public class PaintPane extends BorderPane {
 				redrawCanvas();
 
 			} else {
+				selectedFigures.clear();
 				Figure newFigure;
 				if (rectangleButton.isSelected()) {
 					newFigure = new Rectangle(startPoint, endPoint);
@@ -205,6 +209,7 @@ public class PaintPane extends BorderPane {
 					return;
 				}
 				canvasState.addFigure(newFigure);
+				selectedFigures.add(newFigure);
 				redrawCanvas();
 			}
 		});
@@ -305,7 +310,6 @@ public class PaintPane extends BorderPane {
 				canvasState.rotateFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
-				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
@@ -315,7 +319,6 @@ public class PaintPane extends BorderPane {
 				canvasState.flipHFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
-				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
@@ -325,7 +328,6 @@ public class PaintPane extends BorderPane {
 				canvasState.flipVFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
-				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
@@ -335,7 +337,6 @@ public class PaintPane extends BorderPane {
 				canvasState.augmentFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
-				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
@@ -345,7 +346,6 @@ public class PaintPane extends BorderPane {
 				canvasState.reduceFigure(figure);
 			}
 			if(!selectedFigures.isEmpty()) {
-				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
@@ -355,7 +355,6 @@ public class PaintPane extends BorderPane {
 				FigureComposition figureComposition = new FigureComposition();
 				figureComposition.addAll(selectedFigures);
 				figureCompositions.add(figureComposition);
-				selectedFigures.clear();
 				redrawCanvas();
 			}
 		});
