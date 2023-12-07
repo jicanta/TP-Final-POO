@@ -143,6 +143,11 @@ public class PaintPane extends BorderPane {
 				for(Figure figure : canvasState.figures()) {
 					if(figure.isInside(selectionRect)) {
 						found = true;
+						for(FigureComposition figureComposition : figureCompositions){
+							if(figureComposition.contains(figure)){
+								selectedFigures.addAll(figureComposition.getList());
+							}
+						}
 						selectedFigures.add(figure);
 					}
 				}
