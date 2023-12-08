@@ -1,9 +1,5 @@
 package backend.model;
 
-import javafx.scene.canvas.GraphicsContext;
-
-import java.util.Objects;
-
 public class Ellipse implements Figure {
 
     protected Point centerPoint;
@@ -32,7 +28,7 @@ public class Ellipse implements Figure {
     }
 
     public double getRadius() {
-        return this.sMayorAxis/2;
+        return Math.max(sMayorAxis/2, sMinorAxis/2);
     }
 
     @Override

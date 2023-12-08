@@ -2,13 +2,12 @@ package backend;
 
 import backend.model.Figure;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class CanvasState {
 
     private final List<Figure> list = new ArrayList<>();
+    private final List<FigureComposition> compositions = new ArrayList<>();
 
     public void addFigure(Figure figure) {
         list.add(figure);
@@ -39,7 +38,10 @@ public class CanvasState {
     }
 
     public List<Figure> figures() {
-        return new ArrayList<>(list);
+        return this.list;
     }
 
+    public List<FigureComposition> compositions() {
+        return this.compositions;
+    }
 }

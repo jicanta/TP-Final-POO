@@ -8,8 +8,6 @@ import frontend.model.Figures.CircleFront;
 import frontend.model.Figures.EllipseFront;
 import frontend.model.Figures.RectangleFront;
 import frontend.model.Figures.SquareFront;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
@@ -57,7 +55,7 @@ public class PaintPane extends BorderPane {
 	// Lista de figuras seleccionadas
 	Set<Figure> selectedFigures = new HashSet<>();
 	// Lista de agrupaciones de figuras
-	ArrayList<FigureComposition> figureCompositions = new ArrayList<>();
+	//List<FigureComposition> figureCompositions = new ArrayList<>();	// TODO: LA PASE AL BACK (CANVAS STATE)
 
 	// StatusBar
 	StatusPane statusPane;
@@ -167,7 +165,7 @@ public class PaintPane extends BorderPane {
 				for(Figure figure : canvasState.figures()) {
 					if(figure.isInside(selectionRect)) {
 						found = true;
-						for(FigureComposition figureComposition : figureCompositions){
+						for(FigureComposition figureComposition : canvasState.compositions()){
 							if(figureComposition.contains(figure)){
 								selectedFigures.addAll(figureComposition.getList());
 							}
@@ -239,11 +237,6 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-
-		/* no me gusta mucho toda esta parte del codigo pero probe iterando con la lista al reves
-		   y no funca, tipo si selecciono uno se selecciona el de atras tambien
-		 */
-
 		canvas.setOnMouseClicked(event -> {
 			Point eventPoint = new Point(event.getX(), event.getY()); // TODO: STARTPOINT NO LO COMPARO CON NULL XQ NO LO IGUALE A NULL ANTES
 			if(startPoint.equals(eventPoint) && selectionButton.isSelected()) {
@@ -257,7 +250,7 @@ public class PaintPane extends BorderPane {
 						found = true;
 						selectedFigures.add(figure);
 						label.append(figure);
-						for (FigureComposition composition : figureCompositions) {
+						for (FigureComposition composition : canvasState.compositions()) {
 							if (composition.contains(figure)) {
 								compositionsToAdd.add(composition);
 							}
@@ -280,7 +273,6 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-		// esto es para mover las figuras
 		canvas.setOnMouseDragged(event -> {
 			if(selectionButton.isSelected()) {
 				Point eventPoint = new Point(event.getX(), event.getY());
@@ -354,14 +346,14 @@ public class PaintPane extends BorderPane {
 			if(!selectedFigures.isEmpty()) {
 				FigureComposition figureComposition = new FigureComposition();
 				figureComposition.addAll(selectedFigures);
-				figureCompositions.add(figureComposition);
+				canvasState.compositions().add(figureComposition);
 				redrawCanvas();
 			}
 		});
 
 		ungroupButton.setOnAction(event -> {
 			for(Figure selectedFigure : selectedFigures){
-                figureCompositions.removeIf(figureComposition -> figureComposition.contains(selectedFigure));
+                canvasState.compositions().removeIf(figureComposition -> figureComposition.contains(selectedFigure));
 			}
 			if(!selectedFigures.isEmpty()) {
 				selectedFigures.clear();
