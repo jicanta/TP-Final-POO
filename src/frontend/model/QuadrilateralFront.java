@@ -20,26 +20,14 @@ public abstract class QuadrilateralFront extends FigureFront {
         gc.strokeRect(parameters[0], parameters[1], parameters[2], parameters[3]);
     }
 
-    private void applyEffects(GraphicsContext gc, Double[] parameters) {
-        if (this.hasShadow()) {
-            drawShadow(gc, parameters);
-        }
-        if (this.hasBevel()) {
-            drawBevel(gc, parameters);
-        }
-        if (this.hasGradient()) {
-            drawGradient(gc);
-        } else {
-            gc.setFill(this.getColor());
-        }
-    }
-
-    private void drawShadow(GraphicsContext gc, Double[] parameters) {
+    @Override
+    public void drawShadow(GraphicsContext gc, Double[] parameters) {
         gc.setFill(Color.GRAY);
         gc.fillRect(parameters[0] + 10.0, parameters[1] + 10.0, parameters[2], parameters[3]);
     }
 
-    private void drawBevel(GraphicsContext gc, Double[] parameters) {
+    @Override
+    public void drawBevel(GraphicsContext gc, Double[] parameters) {
         gc.setLineWidth(10);
         gc.setStroke(Color.LIGHTGRAY);
         gc.strokeLine(parameters[0], parameters[1], parameters[0] + parameters[2], parameters[1]);
@@ -50,7 +38,8 @@ public abstract class QuadrilateralFront extends FigureFront {
         gc.setLineWidth(1);
     }
 
-    private void drawGradient(GraphicsContext gc) {
+    @Override
+    public void drawGradient(GraphicsContext gc) {
         LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, true,
                 CycleMethod.NO_CYCLE,
                 new Stop(0, this.getColor()),

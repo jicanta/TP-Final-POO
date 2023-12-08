@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public abstract class FigureFront {
-    private Color color;
+    private final Color color;
     private boolean shadow;
     private boolean bevel;
     private boolean gradient;
@@ -16,6 +16,26 @@ public abstract class FigureFront {
         this.shadow = shadow;
         this.bevel = bevel;
         this.gradient = gradient;
+    }
+
+    public abstract void drawShadow(GraphicsContext gc, Double[] parameters);
+
+    public abstract void drawBevel(GraphicsContext gc, Double[] parameters);
+
+    public abstract void drawGradient(GraphicsContext gc);
+
+    public void applyEffects(GraphicsContext gc, Double[] parameters) {
+        if (this.hasShadow()) {
+            drawShadow(gc, parameters);
+        }
+        if (this.hasBevel()) {
+            drawBevel(gc, parameters);
+        }
+        if (this.hasGradient()) {
+            drawGradient(gc);
+        } else {
+            gc.setFill(this.getColor());
+        }
     }
 
     protected Color getColor(){    // TODO: nose si deberia ser public o protected pero bueno

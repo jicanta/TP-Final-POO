@@ -19,27 +19,14 @@ public abstract class OvalFront extends FigureFront {
         gc.strokeOval(parameters[0], parameters[1], parameters[2], parameters[3]);
     }
 
-    private void applyEffects(GraphicsContext gc, Double[] parameters){
-        if (this.hasShadow()){
-            drawShadow(gc, parameters);
-        }
-        if (this.hasBevel()){
-            drawBevel(gc, parameters);
-        }
-        if (this.hasGradient()){
-            drawGradient(gc);
-        }
-        else {
-            gc.setFill(this.getColor());
-        }
-    }
-
-    private void drawShadow(GraphicsContext gc, Double[] parameters){
+    @Override
+    public void drawShadow(GraphicsContext gc, Double[] parameters){
         gc.setFill(Color.GRAY);
         gc.fillOval(parameters[0] + 10.0, parameters[1] + 10.0, parameters[2], parameters[3]);
     }
 
-    private void drawBevel(GraphicsContext gc, Double[] parameters){
+    @Override
+    public void drawBevel(GraphicsContext gc, Double[] parameters){
         gc.setLineWidth(10);
         gc.setStroke(Color.LIGHTGRAY);
         gc.strokeArc(parameters[0] + 1.0, parameters[1] + 1.0, parameters[2], parameters[3], 45, 180, ArcType.OPEN);
@@ -48,7 +35,8 @@ public abstract class OvalFront extends FigureFront {
         gc.setLineWidth(1);
     }
 
-    private void drawGradient(GraphicsContext gc){
+    @Override
+    public void drawGradient(GraphicsContext gc){
         RadialGradient radialGradient = new RadialGradient(0, 0, 0.5, 0.5, 0.5, true,
                 CycleMethod.NO_CYCLE,
                 new Stop(0.0, this.getColor()),

@@ -43,7 +43,7 @@ public class Ellipse implements Figure {
 
     @Override
     public Double[] getDrawParameters(){
-       return new Double[]{this.centerPoint.getX() - (this.sMayorAxis/2), this.centerPoint.getY() - (this.sMinorAxis/2), sMayorAxis, sMinorAxis};
+       return new Double[]{ this.centerPoint.getX() - (this.sMayorAxis / 2), this.centerPoint.getY() - (this.sMinorAxis / 2), sMayorAxis, sMinorAxis };
     }
 
     @Override
@@ -54,21 +54,21 @@ public class Ellipse implements Figure {
     }
 
     public void flipHorizontally(){
-        setCenterPoint(centerPoint.getX()+this.getsMayorAxis(), centerPoint.getY());
+        setCenterPoint(centerPoint.getX() + this.getsMayorAxis(), centerPoint.getY());
     }
 
     public void flipVertically(){
-        setCenterPoint(centerPoint.getX(), centerPoint.getY()+this.getsMinorAxis());
+        setCenterPoint(centerPoint.getX(), centerPoint.getY() + this.getsMinorAxis());
     }
 
     public void augment(){
-        this.sMayorAxis = this.getsMayorAxis()*1.25;
-        this.sMinorAxis = this.getsMinorAxis()*1.25;
+        this.sMayorAxis = this.getsMayorAxis() * 1.25;
+        this.sMinorAxis = this.getsMinorAxis() * 1.25;
     }
 
     public void reduce() {
-        this.sMayorAxis = this.getsMayorAxis()*0.75;
-        this.sMinorAxis = this.getsMinorAxis()*0.75;
+        this.sMayorAxis = this.getsMayorAxis() * 0.75;
+        this.sMinorAxis = this.getsMinorAxis() * 0.75;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class Ellipse implements Figure {
     public boolean isInside(Rectangle rectangle) {
         return rectangle.figureBelongs(new Point(centerPoint.getX() + sMayorAxis / 2, centerPoint.getY())) &&
                 rectangle.figureBelongs(new Point(centerPoint.getX() - sMayorAxis / 2, centerPoint.getY())) &&
-                rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() + sMinorAxis / 2)) &&
-                rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() - sMinorAxis / 2));
+                rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() + sMinorAxis / 2.0)) &&
+                rectangle.figureBelongs(new Point(centerPoint.getX() , centerPoint.getY() - sMinorAxis / 2.0));
     }
 }

@@ -3,7 +3,6 @@ package backend;
 import backend.model.Figure;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +30,7 @@ public class FigureComposition {
     public String toString(){
         StringBuilder string = new StringBuilder();
         for (Figure figure : this.compositionList){
-            string.append(figure.toString()+", ");
+            string.append(figure.toString()).append(", ");
         }
         return string.toString();
     }

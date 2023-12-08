@@ -1,8 +1,5 @@
 package backend.model;
 
-
-import javafx.scene.canvas.GraphicsContext;
-
 public interface Figure {
     void moveFigure(Double diffX, Double diffY);
     Double[] getDrawParameters();
