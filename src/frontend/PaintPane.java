@@ -165,6 +165,7 @@ public class PaintPane extends BorderPane {
 				for(Figure figure : canvasState.figures()) {
 					if(figure.isInside(selectionRect)) {
 						found = true;
+						label.append(figure).append(", ");
 						for(FigureComposition figureComposition : canvasState.compositions()){
 							if(figureComposition.contains(figure)){
 								selectedFigures.addAll(figureComposition.getList());
