@@ -16,6 +16,9 @@ public abstract class OvalFront extends FigureFront {
         Double[] parameters = this.backOval.getDrawParameters();
         applyEffects(gc, parameters);
         gc.fillOval(parameters[0], parameters[1], parameters[2], parameters[3]);
+        if(hasBevel()){
+            gc.setStroke(Color.RED);
+        }
         gc.strokeOval(parameters[0], parameters[1], parameters[2], parameters[3]);
     }
 

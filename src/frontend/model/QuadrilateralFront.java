@@ -17,6 +17,9 @@ public abstract class QuadrilateralFront extends FigureFront {
         Double[] parameters = this.backQuadrilateral.getDrawParameters();
         applyEffects(gc, parameters);
         gc.fillRect(parameters[0], parameters[1], parameters[2], parameters[3]);
+        if(hasBevel()){
+            gc.setStroke(Color.RED);
+        }
         gc.strokeRect(parameters[0], parameters[1], parameters[2], parameters[3]);
     }
 
