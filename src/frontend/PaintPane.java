@@ -369,12 +369,13 @@ public class PaintPane extends BorderPane {
 	void redrawCanvas() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		for(Figure figure : canvasState.figures()) {
-			if (selectedFigures.contains(figure)) {
+			boolean isSelected = selectedFigures.contains(figure);
+			if (isSelected) {
 				gc.setStroke(Color.RED);
 			} else {
 				gc.setStroke(lineColor);
 			}
-			figuresFrontMap.get(figure).drawFigure(gc);
+			figuresFrontMap.get(figure).drawFigure(gc, isSelected);
 		}
 	}
 

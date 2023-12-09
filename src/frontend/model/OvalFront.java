@@ -12,11 +12,11 @@ public abstract class OvalFront extends FigureFront {
         this.backOval = backOval;
     }
     @Override
-    public void drawFigure(GraphicsContext gc){
+    public void drawFigure(GraphicsContext gc, boolean isSelected){
         Double[] parameters = this.backOval.getDrawParameters();
         applyEffects(gc, parameters);
         gc.fillOval(parameters[0], parameters[1], parameters[2], parameters[3]);
-        if(hasBevel()){
+        if(hasBevel() && isSelected){
             gc.setStroke(Color.RED);
         }
         gc.strokeOval(parameters[0], parameters[1], parameters[2], parameters[3]);

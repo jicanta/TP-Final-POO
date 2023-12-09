@@ -59,5 +59,5 @@ public abstract class FigureFront {
         this.bevel = bevel;
         this.gradient = gradient;
     }
-    public abstract void drawFigure(GraphicsContext gc);
+    public abstract void drawFigure(GraphicsContext gc, boolean isSelected);
 }

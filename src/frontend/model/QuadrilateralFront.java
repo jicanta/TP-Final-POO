@@ -13,11 +13,11 @@ public abstract class QuadrilateralFront extends FigureFront {
     }
 
     @Override
-    public void drawFigure(GraphicsContext gc) {
+    public void drawFigure(GraphicsContext gc, boolean isSelected) {
         Double[] parameters = this.backQuadrilateral.getDrawParameters();
         applyEffects(gc, parameters);
         gc.fillRect(parameters[0], parameters[1], parameters[2], parameters[3]);
-        if(hasBevel()){
+        if(hasBevel() && isSelected){
             gc.setStroke(Color.RED);
         }
         gc.strokeRect(parameters[0], parameters[1], parameters[2], parameters[3]);
@@ -43,10 +43,10 @@ public abstract class QuadrilateralFront extends FigureFront {
 
     @Override
     public void drawGradient(GraphicsContext gc) {
-        LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, true,
+        LinearGradient linearGradient = new LinearGradient(0.0, 0.0, 1.0, 0.0, true,
                 CycleMethod.NO_CYCLE,
-                new Stop(0, this.getColor()),
-                new Stop(1, (this.getColor()).invert()));
+                new Stop(0.0, this.getColor()),
+                new Stop(1.0, (this.getColor()).invert()));
         gc.setFill(linearGradient);
     }
 }
