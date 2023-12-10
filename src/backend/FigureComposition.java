@@ -19,7 +19,12 @@ public class FigureComposition {
     }
 
     public void addAll(Set<Figure> figures){
-        compositionList.addAll(figures);
+        if (figures.size() <= 1){
+            throw new CannotGroupException();
+        }
+        else {
+            compositionList.addAll(figures);
+        }
     }
 
     public boolean contains(Figure fig){

@@ -1,6 +1,5 @@
 package frontend;
 
-import backend.CannotGroupException;
 import backend.CanvasState;
 import backend.FigureComposition;
 import backend.model.*;
@@ -328,16 +327,15 @@ public class PaintPane extends BorderPane {
 		});
 
 		groupButton.setOnAction(event -> {
-			if(selectedFigures.size() <= 1) {
-				throw new CannotGroupException();
-			}
-			else {
+			try {
 				FigureComposition figureComposition = new FigureComposition();
 				figureComposition.addAll(selectedFigures);
 				canvasState.compositions().add(figureComposition);
 				redrawCanvas();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
 			}
-		});
+        });
 
 		ungroupButton.setOnAction(event -> {
 			for(Figure selectedFigure : selectedFigures){
