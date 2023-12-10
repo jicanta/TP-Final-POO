@@ -254,12 +254,12 @@ public class PaintPane extends BorderPane {
 						found = true;
 						selectedFigures.add(figure);
 						label.append(figure);
-						for(FigureComposition composition : canvasState.compositions()) {
-							if(composition.contains(figure)) {
-								compositionsToAdd.add(composition);
-							}
-						}
 						prev = figure;
+					}
+				}
+				for(FigureComposition composition : canvasState.compositions()) {
+					if(composition.contains(prev)) {
+						compositionsToAdd.add(composition);
 					}
 				}
 				for(FigureComposition composition : compositionsToAdd) {
