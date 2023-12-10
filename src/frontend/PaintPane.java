@@ -184,12 +184,10 @@ public class PaintPane extends BorderPane {
 				if(found) {
 					updateCheckBoxesBySelectedFigures();
 				} else {
-					selectedFigures.clear();
 					statusPane.updateStatus("Ninguna figura encontrada");
 				}
 				redrawCanvas();
 			} else {
-				selectedFigures.clear();
 
 				try {
 					Figure newFigure;
