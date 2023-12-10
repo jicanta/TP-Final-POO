@@ -65,7 +65,6 @@ public class PaintPane extends BorderPane {
 
 	// Figura del back - Figura del front
 	Map<Figure, FigureFront> figuresFrontMap = new HashMap<>();
-	
 
 	public void updateSelectedFigures() {
 		for(Figure figure : selectedFigures) {
@@ -112,11 +111,18 @@ public class PaintPane extends BorderPane {
 		}
 	}
 
+	public void checkIfRedraw() {
+		if(!selectedFigures.isEmpty()) {
+			redrawCanvas();
+		}
+	}
+
 	public PaintPane(CanvasState canvasState, StatusPane statusPane, EffectsPane effectsPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
 		this.effectsPane = effectsPane;
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, groupButton, ungroupButton ,rotateRightButton, flipHButton, flipVButton, augmentButton, reduceButton};
+
 		ToggleGroup tools = new ToggleGroup();
 		for(ToggleButton tool : toolsArr) {
 			tool.setMinWidth(90);
@@ -140,6 +146,12 @@ public class PaintPane extends BorderPane {
 		ellipseButton.setOnAction(event -> clearSelectedFigures());
 
 		squareButton.setOnAction(event -> clearSelectedFigures());
+
+		effectsPane.shadow.setOnAction(event -> handleSelectedFigures());
+
+		effectsPane.bevel.setOnAction(event -> handleSelectedFigures());
+
+		effectsPane.gradient.setOnAction(event -> handleSelectedFigures());
 
 		canvas.setOnMousePressed(event -> startPoint = new Point(event.getX(), event.getY()));
 
@@ -211,13 +223,6 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-
-		effectsPane.shadow.setOnAction(event -> handleSelectedFigures());
-
-		effectsPane.bevel.setOnAction(event -> handleSelectedFigures());
-
-		effectsPane.gradient.setOnAction(event -> handleSelectedFigures());
-
 		canvas.setOnMouseMoved(event -> {
 			Point eventPoint = new Point(event.getX(), event.getY());
 			boolean found = false;
@@ -280,9 +285,7 @@ public class PaintPane extends BorderPane {
 				for(Figure selectedFigure : selectedFigures){
 					selectedFigure.moveFigure(diffX, diffY);
 				}
-				if(!selectedFigures.isEmpty()) {
-					redrawCanvas();
-				}
+				checkIfRedraw();
 			}
 		});
 
@@ -300,45 +303,35 @@ public class PaintPane extends BorderPane {
 			for(Figure figure : selectedFigures) {
 				canvasState.rotateFigure(figure);
 			}
-			if(!selectedFigures.isEmpty()) {
-				redrawCanvas();
-			}
+			checkIfRedraw();
 		});
 
 		flipHButton.setOnAction(event -> {
 			for(Figure figure : selectedFigures) {
 				canvasState.flipHFigure(figure);
 			}
-			if(!selectedFigures.isEmpty()) {
-				redrawCanvas();
-			}
+			checkIfRedraw();
 		});
 
 		flipVButton.setOnAction(event -> {
 			for(Figure figure : selectedFigures) {
 				canvasState.flipVFigure(figure);
 			}
-			if(!selectedFigures.isEmpty()) {
-				redrawCanvas();
-			}
+			checkIfRedraw();
 		});
 
 		augmentButton.setOnAction(event -> {
 			for(Figure figure : selectedFigures) {
 				canvasState.augmentFigure(figure);
 			}
-			if(!selectedFigures.isEmpty()) {
-				redrawCanvas();
-			}
+			checkIfRedraw();
 		});
 
 		reduceButton.setOnAction(event -> {
 			for(Figure figure : selectedFigures) {
 				canvasState.reduceFigure(figure);
 			}
-			if(!selectedFigures.isEmpty()) {
-				redrawCanvas();
-			}
+			checkIfRedraw();
 		});
 
 		groupButton.setOnAction(event -> {
