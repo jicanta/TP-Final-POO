@@ -185,11 +185,13 @@ public class PaintPane extends BorderPane {
 					updateCheckBoxesBySelectedFigures();
 				} else {
 					statusPane.updateStatus("Ninguna figura encontrada");
+					//selectedFigures.clear();
 				}
 				redrawCanvas();
 			} else {
 
 				try {
+					selectedFigures.clear();
 					Figure newFigure;
 					if(rectangleButton.isSelected()) {
 						newFigure = new Rectangle(startPoint, endPoint);
@@ -242,6 +244,7 @@ public class PaintPane extends BorderPane {
 		canvas.setOnMouseClicked(event -> {
 			Point eventPoint = new Point(event.getX(), event.getY());
 			if(startPoint.equals(eventPoint) && selectionButton.isSelected()) {
+				selectedFigures.clear();
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
 				Set<FigureComposition> compositionsToAdd = new HashSet<>();
@@ -271,8 +274,8 @@ public class PaintPane extends BorderPane {
 					statusPane.updateStatus("Ninguna figura encontrada");
 				}
 
-				redrawCanvas();
 			}
+			redrawCanvas();
 		});
 
 		canvas.setOnMouseDragged(event -> {
