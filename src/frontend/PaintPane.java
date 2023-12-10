@@ -140,23 +140,29 @@ public class PaintPane extends BorderPane {
 			if(startPoint == null) {
 				return ;
 			}
-			if(endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
+			/*if(endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
 				return ;
-			}
+			}*/
 
 			if(selectionButton.isSelected()) {
 				boolean found = false;
-				Rectangle selectionRect = new Rectangle(startPoint, endPoint);
-				for(Figure figure : canvasState.figures()) {
-					if(figure.isInside(selectionRect)) {
-						found = true;
-						for(FigureComposition figureComposition : canvasState.compositions()){
-							if(figureComposition.contains(figure)){
-								selectedFigures.addAll(figureComposition.getList());
+				try {
+					Rectangle selectionRect = new Rectangle(startPoint, endPoint);
+
+					for (Figure figure : canvasState.figures()) {
+						if (figure.isInside(selectionRect)) {
+							found = true;
+							for (FigureComposition figureComposition : canvasState.compositions()) {
+								if (figureComposition.contains(figure)) {
+									selectedFigures.addAll(figureComposition.getList());
+								}
 							}
+							selectedFigures.add(figure);
 						}
-						selectedFigures.add(figure);
 					}
+				}
+				catch(Exception e){
+
 				}
 
 				if (found) {
@@ -169,30 +175,36 @@ public class PaintPane extends BorderPane {
 
 			} else {
 				selectedFigures.clear();
-				Figure newFigure;
-				if (rectangleButton.isSelected()) {
-					newFigure = new Rectangle(startPoint, endPoint);
-					figuresFrontMap.put(newFigure, new RectangleFront((Rectangle) newFigure, fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
-				} else if (circleButton.isSelected()) {
-					double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
-					newFigure = new Circle(startPoint, circleRadius);
-					figuresFrontMap.put(newFigure, new CircleFront((Circle) newFigure, fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
-				} else if (squareButton.isSelected()) {
-					double size = Math.abs(endPoint.getX() - startPoint.getX());
-					newFigure = new Square(startPoint, size);
-					figuresFrontMap.put(newFigure, new SquareFront((Square) newFigure, fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
-				} else if (ellipseButton.isSelected()) {
-					Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
-					double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
-					double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
-					newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis);
-					figuresFrontMap.put(newFigure, new EllipseFront((Ellipse) newFigure,fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
-				} else {
-					return;
+
+				try {
+					Figure newFigure;
+					if (rectangleButton.isSelected()) {
+						newFigure = new Rectangle(startPoint, endPoint);
+						figuresFrontMap.put(newFigure, new RectangleFront((Rectangle) newFigure, fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
+					} else if (circleButton.isSelected()) {
+						double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
+						newFigure = new Circle(startPoint, circleRadius);
+						figuresFrontMap.put(newFigure, new CircleFront((Circle) newFigure, fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
+					} else if (squareButton.isSelected()) {
+						double size = Math.abs(endPoint.getX() - startPoint.getX());
+						newFigure = new Square(startPoint, size);
+						figuresFrontMap.put(newFigure, new SquareFront((Square) newFigure, fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
+					} else if (ellipseButton.isSelected()) {
+						Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
+						double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
+						double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
+						newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis);
+						figuresFrontMap.put(newFigure, new EllipseFront((Ellipse) newFigure, fillColorPicker.getValue(), effectsPane.checkedShadow(), effectsPane.checkedBevel(), effectsPane.checkedGradient()));
+					} else {
+						return;
+					}
+					canvasState.addFigure(newFigure);
+					selectedFigures.add(newFigure);
+					redrawCanvas();
 				}
-				canvasState.addFigure(newFigure);
-				selectedFigures.add(newFigure);
-				redrawCanvas();
+				catch(Exception e){
+					System.out.println(e.getMessage());
+				}
 			}
 		});
 

@@ -6,6 +6,9 @@ public class Ellipse implements Figure {
     private double sMayorAxis, sMinorAxis;
 
     public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis) {
+        if(sMayorAxis <= 0 || sMinorAxis <= 0){
+            throw new FigureException();
+        }
         setCenterPoint(centerPoint.getX(), centerPoint.getY());
         this.sMayorAxis = sMayorAxis;
         this.sMinorAxis = sMinorAxis;
