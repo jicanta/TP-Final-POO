@@ -1,9 +1,5 @@
 package backend.model;
 
-import javafx.scene.canvas.GraphicsContext;
-
-import java.util.Objects;
-
 public class Rectangle implements Figure {
 
     private Point topLeft, bottomRight;
@@ -13,44 +9,44 @@ public class Rectangle implements Figure {
     }
 
     public double getHeight() {
-        return bottomRight.getY() - topLeft.getY();
+        return this.bottomRight.getY() - this.topLeft.getY();
     }
 
     public double getWidth() {
-        return bottomRight.getX() - topLeft.getX();
+        return this.bottomRight.getX() - this.topLeft.getX();
     }
 
     public Point getTopLeft() {
-        return topLeft;
+        return this.topLeft;
     }
 
     public Point getBottomRight() {
-        return bottomRight;
+        return this.bottomRight;
     }
 
     @Override
     public String toString() {
-        return String.format("Rectángulo [ %s , %s ]", topLeft, bottomRight);
+        return String.format("Rectángulo [ %s , %s ]", this.topLeft, this.bottomRight);
     }
 
     @Override
     public void moveFigure(Double diffX, Double diffY){
-        setNewPoints(new Point(topLeft.getX()+diffX, topLeft.getY()+diffY), new Point(bottomRight.getX()+diffX, bottomRight.getY()+diffY));
+        setNewPoints(new Point(this.topLeft.getX() + diffX, this.topLeft.getY() + diffY), new Point(this.bottomRight.getX() + diffX, this.bottomRight.getY() + diffY));
     }
 
     @Override
     public Double[] getDrawParameters(){
-        return new Double[]{this.topLeft.getX(), this.topLeft.getY(), this.getWidth(), this.getHeight()};
+        return new Double[]{ this.topLeft.getX(), this.topLeft.getY(), this.getWidth(), this.getHeight() };
     }
 
     @Override
     public void rotateR() {
-        double topLeftX = topLeft.getX();
-        double topLeftY = topLeft.getY();
-        double botRightX = bottomRight.getX();
-        double botRightY = bottomRight.getY();
-        double width = getWidth();
-        double height = getHeight();
+        double topLeftX = this.topLeft.getX();
+        double topLeftY = this.topLeft.getY();
+        double botRightX = this.bottomRight.getX();
+        double botRightY = this.bottomRight.getY();
+        double width = this.getWidth();
+        double height = this.getHeight();
 
         double newTopX = topLeftX + (width - height) / 2.0;
         double newTopY = topLeftY - (width - height) / 2.0;
@@ -61,26 +57,26 @@ public class Rectangle implements Figure {
     }
 
     public void flipHorizontally(){
-        Point newTopLeft = new Point(topLeft.getX()+this.getWidth(), topLeft.getY());
-        Point newBottomRight = new Point(bottomRight.getX() + this.getWidth(), bottomRight.getY());
+        Point newTopLeft = new Point(this.topLeft.getX() + this.getWidth(), this.topLeft.getY());
+        Point newBottomRight = new Point(this.bottomRight.getX() + this.getWidth(), this.bottomRight.getY());
         setNewPoints(newTopLeft, newBottomRight);
     }
 
     public void flipVertically(){
-        Point newTopLeft = new Point(topLeft.getX(),topLeft.getY()+this.getHeight());
-        Point newBottomRight = new Point(bottomRight.getX(), bottomRight.getY()+this.getHeight());
+        Point newTopLeft = new Point(this.topLeft.getX(),this.topLeft.getY() + this.getHeight());
+        Point newBottomRight = new Point(this.bottomRight.getX(), this.bottomRight.getY() + this.getHeight());
         setNewPoints(newTopLeft, newBottomRight);
     }
 
     public void augment(){
-        Point newTopLeft = new Point(topLeft.getX() - this.getWidth() * 0.125,topLeft.getY() - this.getHeight() * 0.125);
-        Point newBottomRight = new Point(bottomRight.getX() + this.getWidth() * 0.125, bottomRight.getY() + this.getHeight() * 0.125);
+        Point newTopLeft = new Point(this.topLeft.getX() - this.getWidth() * 0.125,this.topLeft.getY() - this.getHeight() * 0.125);
+        Point newBottomRight = new Point(this.bottomRight.getX() + this.getWidth() * 0.125, this.bottomRight.getY() + this.getHeight() * 0.125);
         setNewPoints(newTopLeft, newBottomRight);
     }
 
     public void reduce(){
-        Point newTopLeft = new Point(topLeft.getX() + this.getWidth() * 0.125,topLeft.getY() + this.getHeight() * 0.125);
-        Point newBottomRight = new Point(bottomRight.getX() - this.getWidth() * 0.125, bottomRight.getY() - this.getHeight() * 0.125);
+        Point newTopLeft = new Point(this.topLeft.getX() + this.getWidth() * 0.125,this.topLeft.getY() + this.getHeight() * 0.125);
+        Point newBottomRight = new Point(this.bottomRight.getX() - this.getWidth() * 0.125, this.bottomRight.getY() - this.getHeight() * 0.125);
         setNewPoints(newTopLeft, newBottomRight);
     }
 
@@ -91,12 +87,12 @@ public class Rectangle implements Figure {
 
     @Override
     public boolean figureBelongs(Point point) {
-        return point.getX() > topLeft.getX() && point.getX() < bottomRight.getX() &&
-                point.getY() > topLeft.getY() && point.getY() < bottomRight.getY();
+        return point.getX() > this.topLeft.getX() && point.getX() < this.bottomRight.getX() &&
+                point.getY() > this.topLeft.getY() && point.getY() < this.bottomRight.getY();
     }
 
     @Override
     public boolean isInside(Rectangle rectangle) {
-        return rectangle.figureBelongs(topLeft) && rectangle.figureBelongs(bottomRight);
+        return rectangle.figureBelongs(this.topLeft) && rectangle.figureBelongs(this.bottomRight);
     }
 }

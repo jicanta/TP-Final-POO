@@ -54,8 +54,6 @@ public class PaintPane extends BorderPane {
 
 	// Lista de figuras seleccionadas
 	Set<Figure> selectedFigures = new HashSet<>();
-	// Lista de agrupaciones de figuras
-	//List<FigureComposition> figureCompositions = new ArrayList<>();	// TODO: LA PASE AL BACK (CANVAS STATE)
 
 	// StatusBar
 	StatusPane statusPane;
@@ -88,9 +86,9 @@ public class PaintPane extends BorderPane {
 	}
 
 	private void updateCheckBoxsBySelectedFigures() {
-		effectsPane.sombra.setIndeterminate(false);
-		effectsPane.biselado.setIndeterminate(false);
-		effectsPane.gradiente.setIndeterminate(false);
+		effectsPane.shadow.setIndeterminate(false);
+		effectsPane.bevel.setIndeterminate(false);
+		effectsPane.gradient.setIndeterminate(false);
 		boolean allShadow = true;
 		boolean allBevel = true;
 		boolean allGradient = true;
@@ -125,29 +123,17 @@ public class PaintPane extends BorderPane {
 		buttonsBox.setPrefWidth(100);
 		gc.setLineWidth(1);
 
-		selectionButton.setOnAction(event -> {
-			clearSelectedFigures();
-		});
+		selectionButton.setOnAction(event -> clearSelectedFigures());
 
-		circleButton.setOnAction(event -> {
-			clearSelectedFigures();
-		});
+		circleButton.setOnAction(event -> clearSelectedFigures());
 
-		rectangleButton.setOnAction(event -> {
-			clearSelectedFigures();
-		});
+		rectangleButton.setOnAction(event -> clearSelectedFigures());
 
-		ellipseButton.setOnAction(event -> {
-			clearSelectedFigures();
-		});
+		ellipseButton.setOnAction(event -> clearSelectedFigures());
 
-		squareButton.setOnAction(event -> {
-			clearSelectedFigures();
-		});
+		squareButton.setOnAction(event -> clearSelectedFigures());
 
-		canvas.setOnMousePressed(event -> {
-			startPoint = new Point(event.getX(), event.getY());
-		});
+		canvas.setOnMousePressed(event -> startPoint = new Point(event.getX(), event.getY()));
 
 		canvas.setOnMouseReleased(event -> {
 			Point endPoint = new Point(event.getX(), event.getY());
@@ -214,11 +200,11 @@ public class PaintPane extends BorderPane {
 		});
 
 
-		effectsPane.sombra.setOnAction(event -> handleSelectedFigures());
+		effectsPane.shadow.setOnAction(event -> handleSelectedFigures());
 
-		effectsPane.biselado.setOnAction(event -> handleSelectedFigures());
+		effectsPane.bevel.setOnAction(event -> handleSelectedFigures());
 
-		effectsPane.gradiente.setOnAction(event -> handleSelectedFigures());
+		effectsPane.gradient.setOnAction(event -> handleSelectedFigures());
 
 		canvas.setOnMouseMoved(event -> {
 			Point eventPoint = new Point(event.getX(), event.getY());
@@ -239,7 +225,7 @@ public class PaintPane extends BorderPane {
 		});
 
 		canvas.setOnMouseClicked(event -> {
-			Point eventPoint = new Point(event.getX(), event.getY()); // TODO: STARTPOINT NO LO COMPARO CON NULL XQ NO LO IGUALE A NULL ANTES
+			Point eventPoint = new Point(event.getX(), event.getY());
 			if(startPoint.equals(eventPoint) && selectionButton.isSelected()) {
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");

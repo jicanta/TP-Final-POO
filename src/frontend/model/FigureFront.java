@@ -1,11 +1,12 @@
 package frontend.model;
 
-import backend.model.Figure;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public abstract class FigureFront {
+
+    protected static final int BEVEL_LINE_WIDTH = 10;
+    protected static final int DEFAULT_LINE_WIDTH = 1;
     private final Color color;
     private boolean shadow;
     private boolean bevel;
@@ -25,33 +26,33 @@ public abstract class FigureFront {
     public abstract void drawGradient(GraphicsContext gc);
 
     public void applyEffects(GraphicsContext gc, Double[] parameters) {
-        if (this.hasShadow()) {
+        if(this.hasShadow()) {
             drawShadow(gc, parameters);
         }
-        if (this.hasBevel()) {
+        if(this.hasBevel()) {
             drawBevel(gc, parameters);
         }
-        if (this.hasGradient()) {
+        if(this.hasGradient()) {
             drawGradient(gc);
         } else {
             gc.setFill(this.getColor());
         }
     }
 
-    protected Color getColor(){    // TODO: nose si deberia ser public o protected pero bueno
+    protected Color getColor(){
         return this.color;
     }
 
     public boolean hasShadow(){
-        return shadow;
+        return this.shadow;
     }
 
     public boolean hasBevel(){
-        return bevel;
+        return this.bevel;
     }
 
     public boolean hasGradient(){
-        return gradient;
+        return this.gradient;
     }
 
     public void updateEffects(boolean shadow, boolean bevel, boolean gradient) {

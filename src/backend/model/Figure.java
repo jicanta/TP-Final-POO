@@ -8,6 +8,6 @@ public interface Figure {
     void flipVertically();
     void augment();
     void reduce();
-    boolean figureBelongs(Point point); // no deberia ser public supongo, fijarme eso
-    boolean isInside(Rectangle rectangle); // no deberia ser public supongo, fijarme eso
+    boolean figureBelongs(Point point);
+    boolean isInside(Rectangle rectangle);
 }

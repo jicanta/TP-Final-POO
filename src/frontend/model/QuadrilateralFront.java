@@ -31,14 +31,14 @@ public abstract class QuadrilateralFront extends FigureFront {
 
     @Override
     public void drawBevel(GraphicsContext gc, Double[] parameters) {
-        gc.setLineWidth(10);
+        gc.setLineWidth(BEVEL_LINE_WIDTH);
         gc.setStroke(Color.LIGHTGRAY);
         gc.strokeLine(parameters[0], parameters[1], parameters[0] + parameters[2], parameters[1]);
         gc.strokeLine(parameters[0], parameters[1], parameters[0], parameters[1] + parameters[3]);
         gc.setStroke(Color.BLACK);
         gc.strokeLine(parameters[0] + parameters[2], parameters[1], parameters[0] + parameters[2], parameters[1] + parameters[3]);
         gc.strokeLine(parameters[0] + parameters[2], parameters[1] + parameters[3], parameters[0], parameters[1] + parameters[3]);
-        gc.setLineWidth(1);
+        gc.setLineWidth(DEFAULT_LINE_WIDTH);
     }
 
     @Override

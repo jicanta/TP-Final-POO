@@ -8,6 +8,6 @@ public class Circle extends Ellipse {
 
     @Override
     public String toString() {
-        return String.format("Círculo [Centro: %s, Radio: %.2f]", centerPoint, getRadius());
+        return String.format("Círculo [Centro: %s, Radio: %.2f]", this.getCenterPoint(), this.getRadius());
     }
 }
