@@ -1,5 +1,6 @@
 package frontend;
 
+import backend.CannotGroupException;
 import backend.CanvasState;
 import backend.FigureComposition;
 import backend.model.*;
@@ -85,7 +86,7 @@ public class PaintPane extends BorderPane {
 		redrawCanvas();
 	}
 
-	private void updateCheckBoxsBySelectedFigures() {
+	private void updateCheckBoxesBySelectedFigures() {
 		effectsPane.shadow.setIndeterminate(false);
 		effectsPane.bevel.setIndeterminate(false);
 		effectsPane.gradient.setIndeterminate(false);
@@ -160,7 +161,7 @@ public class PaintPane extends BorderPane {
 				}
 
 				if (found) {
-					updateCheckBoxsBySelectedFigures();
+					updateCheckBoxesBySelectedFigures();
 				} else {
 					selectedFigures.clear();
 					statusPane.updateStatus("Ninguna figura encontrada");
@@ -246,7 +247,7 @@ public class PaintPane extends BorderPane {
 					selectedFigures.addAll(composition.getList());
 				}
 				if (found) {
-					updateCheckBoxsBySelectedFigures();
+					updateCheckBoxesBySelectedFigures();
 					statusPane.updateStatus(label.toString());
 				} else {
 					selectedFigures.clear();
@@ -327,7 +328,10 @@ public class PaintPane extends BorderPane {
 		});
 
 		groupButton.setOnAction(event -> {
-			if(!selectedFigures.isEmpty()) {
+			if(selectedFigures.size() <= 1) {
+				throw new CannotGroupException();
+			}
+			else {
 				FigureComposition figureComposition = new FigureComposition();
 				figureComposition.addAll(selectedFigures);
 				canvasState.compositions().add(figureComposition);
